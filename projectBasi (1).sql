@@ -82,13 +82,6 @@ CREATE TABLE Reward (
 )
 engine= "InnoDB";
 
--- Tabella ProgettoHardware
-CREATE TABLE ProgettoHardware (
-    nome_Progetto VARCHAR(50) PRIMARY KEY,
-    FOREIGN KEY (nome_Progetto) REFERENCES Progetto(nome)
-)
-engine= "InnoDB";
-
 -- Tabella Componente
 CREATE TABLE Componente (
     nome VARCHAR(50) PRIMARY KEY,
@@ -101,10 +94,10 @@ engine= "InnoDB";
 CREATE TABLE Lista_Componenti (
     nome_Componente VARCHAR(50) NOT NULL,
     nome_Progetto VARCHAR(50) NOT NULL,
-    quantita INT NOT NULL
+    quantita INT NOT NULL,
     PRIMARY KEY (nome_Componente, nome_Progetto),
     FOREIGN KEY (nome_Componente) REFERENCES Componente(nome),
-    FOREIGN KEY (nome_Progetto) REFERENCES ProgettoHardware(nome_Progetto)
+    FOREIGN KEY (nome_Progetto) REFERENCES Progetto(nome)
 )
 engine= "InnoDB";
 
