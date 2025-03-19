@@ -1,101 +1,58 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrazione</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <h2>Registrazione Utente</h2>
-        <form action="register.php" method="POST">
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="text" name="nickname" placeholder="Nickname" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <input type="text" name="nome" placeholder="Nome" required>
-            <input type="text" name="cognome" placeholder="Cognome" required>
-            <input type="number" name="anno_nascita" placeholder="Anno di Nascita" required>
-            <input type="text" name="luogo_nascita" placeholder="Luogo di Nascita" required>
-
-            <!-- Selezione del tipo di utente -->
-            <label for="tipo_utente">Tipo di utente:</label>
-            <select name="tipo_utente" onchange="this.form.submit()" required>
-                <option value="">Seleziona Tipo</option>
-                <option value="Amministratore" <?= (isset($_POST['tipo_utente']) && $_POST['tipo_utente'] == 'Amministratore') ? 'selected' : '' ?>>Amministratore</option>
-                <option value="Creatore" <?= (isset($_POST['tipo_utente']) && $_POST['tipo_utente'] == 'Creatore') ? 'selected' : '' ?>>Creatore</option>
-            </select>
-
-            <!-- Campo codice sicurezza visibile solo se l'utente ha selezionato "Amministratore" -->
-            <?php if (isset($_POST['tipo_utente']) && $_POST['tipo_utente'] == 'Amministratore'): ?>
-                <input type="text" name="codice_sicurezza" placeholder="Codice Sicurezza (Solo per Amministratori)" required>
-            <?php endif; ?>
-
-            <button type="submit">Registrati</button>
-        </form>
-        <a href="login.php" class="link-login">Hai già un account? Accedi</a>
-    </div>
-</body>
-</html>
-
 <?php
+// Inclusione del file di configurazione per la connessione al database
 require 'config.php';
+$conn = new mysqli($host, $username, $password, $dbname);
 
+// Abilita la visualizzazione degli errori
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+// Controllo se il form è stato inviato
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = trim($_POST['email']);
-    $nickname = trim($_POST['nickname']);
-    $password = trim($_POST['password']);
-    $nome = trim($_POST['nome']);
-    $cognome = trim($_POST['cognome']);
-    $anno_nascita = trim($_POST['anno_nascita']);
-    $luogo_nascita = trim($_POST['luogo_nascita']);
-    $tipo_utente = trim($_POST['tipo_utente']);
-    $codice_sicurezza = isset($_POST['codice_sicurezza']) ? trim($_POST['codice_sicurezza']) : null;
+    // Recupero dei dati inviati dal form
+    $email = $_POST['email'];
+    $nickname = $_POST['nickname'];
+    // Hash della password per sicurezza
+    $password = $_POST['password'];
+    $nome = $_POST['nome'];
+    $cognome = $_POST['cognome'];
+    $anno_nascita = $_POST['anno_nascita'];
+    $luogo_nascita = $_POST['luogo_nascita'];
 
-    if (empty($email) || empty($nickname) || empty($password) || empty($nome) || empty($cognome) || empty($anno_nascita) || empty($luogo_nascita) || empty($tipo_utente)) {
-        die("Tutti i campi sono obbligatori!");
-    }
-
-    if ($tipo_utente === "Amministratore" && empty($codice_sicurezza)) {
-        die("Il codice di sicurezza è obbligatorio per gli amministratori.");
-    }
-
-    // Connessione al database
-    $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
+    // Preparazione della query SQL che chiama la stored procedure esistente per la registrazione dell'utente
+    $stmt = $conn->prepare("CALL RegistrazioneUtente(?, ?, ?, ?, ?, ?, ?)");
     
-    if ($conn->connect_error) {
-        die("Connessione fallita: " . $conn->connect_error);
-    }
-
-    // Inserimento nella tabella Utente
-    $stmt = $conn->prepare("INSERT INTO Utente (email, nickname, password, nome, cognome, anno_nascita, luogo_nascita) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    // Associazione dei parametri in base alla stored procedure definita nel database
     $stmt->bind_param("sssssis", $email, $nickname, $password, $nome, $cognome, $anno_nascita, $luogo_nascita);
     
+    // Esecuzione della query e gestione dell'esito
     if ($stmt->execute()) {
-        // Se l'utente è un Amministratore, lo aggiungiamo alla tabella Amministratore
-        if ($tipo_utente === "Amministratore") {
-            $stmt = $conn->prepare("INSERT INTO Amministratore (email_Utente, codice_sicurezza) VALUES (?, ?)");
-            $stmt->bind_param("ss", $email, $codice_sicurezza);
-            $stmt->execute();
-        }
-
-        // Se l'utente è un Creatore, lo aggiungiamo alla tabella Creatore
-        if ($tipo_utente === "Creatore") {
-            $nr_progetti = 0;
-            $affidabilita = 0;
-            $stmt = $conn->prepare("INSERT INTO Creatore (email_Utente, nr_progetti, affidabilità) VALUES (?, ?, ?)");
-            $stmt->bind_param("sii", $email, $nr_progetti, $affidabilita);
-            $stmt->execute();
-        }
-
         echo "Registrazione completata con successo!";
-        header("Location: login.php");
-        exit();
     } else {
         echo "Errore nella registrazione: " . $stmt->error;
     }
-
+    
+    // Chiusura dello statement e della connessione
     $stmt->close();
     $conn->close();
 }
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registrazione Utente</title>
+</head>
+<body>
+    <!-- Form per la registrazione dell'utente -->
+    <form method="POST">
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="text" name="nickname" placeholder="Nickname" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="text" name="nome" placeholder="Nome" required>
+        <input type="text" name="cognome" placeholder="Cognome" required>
+        <input type="number" name="anno_nascita" placeholder="Anno di nascita" required>
+        <input type="text" name="luogo_nascita" placeholder="Luogo di nascita" required>
+        <button type="submit">Registrati</button>
+    </form>
+</body>
+</html>
