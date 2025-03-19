@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bostarter - Home</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #4be006;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .container {
+            max-width: 650px;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+        h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #343a40;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px; 
+        }
+        .btn-custom {
+            width: 60%;
+            margin-top: 15px;
+            padding: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            background-color: #4be006;
+            color: white;
+            border-radius: 8px;
+            transition: all 0.3s ease-in-out;
+            text-decoration: none;
+            display: block;
+        }
+        .btn-custom:hover {
+            background-color: #3aaa06;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>BOSTARTER</h1>
+        <p class="subtitle">Scegli come accedere alla piattaforma</p>
+        <div class="btn-container">
+            <a href="login.php" class="btn btn-custom">Accedi come Utente</a>
+            <a href="loginCreatore.php" class="btn btn-custom">Accedi come Creatore</a>
+            <a href="loginAmministratore.php" class="btn btn-custom">Accedi come Amministratore</a>
+        </div>
+    </div>
+
+</body>
+</html>
