@@ -12,59 +12,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Connessione al database
     $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
-    
+
     if ($conn->connect_error) {
         die("Connessione fallita: " . $conn->connect_error);
     }
 
-    // Controllo se l'utente esiste
-    $stmt = $conn->prepare("SELECT email, password FROM Utente WHERE email = ?");
-    $stmt->bind_param("s", $email);
+    // Uso della stored procedure AutenticazioneUtente
+    $stmt = $conn->prepare("CALL AutenticazioneUtente(?, ?)");
+    $stmt->bind_param("ss", $email, $password);
     $stmt->execute();
-    $stmt->store_result();
 
-    if ($stmt->num_rows > 0) {
-        $stmt->bind_result($db_email, $db_password);
-        $stmt->fetch();
+    $result = $stmt->get_result();
 
-        // Confronto diretto della password (senza hashing)
-        if ($password === $db_password) {
-            $_SESSION['user_email'] = $db_email;
+    if ($result->num_rows > 0) {
+        $user = $stmt->fetch_assoc();
+        $_SESSION['user_email'] = $email;
 
-            // Controllo se l'utente è un Amministratore
-            $stmt = $conn->prepare("SELECT codice_sicurezza FROM Amministratore WHERE email_Utente = ?");
-            $stmt->bind_param("s", $email);
-            $stmt->execute();
-            $stmt->store_result();
-
-            if ($stmt->num_rows > 0) {
+        switch ($user['ruolo']) {
+            case 'Amministratore':
                 $_SESSION['user_role'] = "Amministratore";
                 header("Location: dashboard_admin.php");
                 exit();
-            }
 
-            // Controllo se l'utente è un Creatore
-            $stmt = $conn->prepare("SELECT nr_progetti FROM Creatore WHERE email_Utente = ?");
-            $stmt->bind_param("s", $email);
-            $stmt->execute();
-            $stmt->store_result();
-
-            if ($stmt->num_rows > 0) {
+            case 'Creatore':
                 $_SESSION['user_role'] = "Creatore";
                 header("Location: dashboard_creatore.php");
                 exit();
-            }
 
-            // Se non è né Amministratore né Creatore, allora è solo un utente standard
-            $_SESSION['user_role'] = "Utente";
-            header("Location: dashboard.php");
-            exit();
-        } else {
-            echo "Email o password errati!";
+            default:
+                $_SESSION['user_role'] = "Utente";
+                header("Location: dashboard.php");
+                exit();
         }
-    } else {
-        echo "Email o password errati!";
     }
+
+    echo "Email o password errati!";
 
     $stmt->close();
     $conn->close();
