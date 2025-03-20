@@ -51,6 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="container">
+        <a class="btn-home" href="../../index.html">← Torna alla Home</a>
         <h2>Login Creatore</h2>
         <form method="POST">
             <input type="email" name="email" placeholder="Email" required>
@@ -60,6 +61,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="error-msg"><?=htmlspecialchars($error)?></div>
             <?php endif; ?>
         </form>
+        <p style="text-align:center; margin-top:10px;">
+        Non sei ancora registrato? <a href="../register/registerCreatore.php">Vai alla pagina di registrazione</a>
+        </p>
     </div>
 </body>
 </html>
