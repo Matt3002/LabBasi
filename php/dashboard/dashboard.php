@@ -16,7 +16,7 @@ echo "<a href='logout.php'>Logout</a>";*/
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bostarter</title>
-    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
     <script>
         function toggleMenu() {
             let sidebar = document.getElementById("sidebar");
@@ -47,7 +47,7 @@ echo "<a href='logout.php'>Logout</a>";*/
                 <h3>Top Creatori</h3>
                 <p>
                 <?php
-                    require 'config.php';
+                    require '../config.php';
 
                     error_reporting(E_ALL);
                     ini_set('display_errors', 1);

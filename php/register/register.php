@@ -1,6 +1,6 @@
 <?php
 // Inclusione del file di configurazione per la connessione al database
-require 'config.php';
+require '../config.php';
 $conn = new mysqli($host, $username, $password, $dbname);
 
 // Abilita la visualizzazione degli errori
