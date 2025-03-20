@@ -283,6 +283,25 @@ BEGIN
 END //
 DELIMITER ;
 
+-- Stored Procedure per autenticazione di un creatore
+DELIMITER //
+CREATE PROCEDURE AutenticazioneCreatore(
+    IN p_email VARCHAR(50),
+    IN p_password VARCHAR(50)
+)
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1
+        FROM Utente U
+        INNER JOIN Creatore C ON U.email = C.email_Utente
+        WHERE U.email = p_email AND U.password = p_password
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Errore: Credenziali non valide o utente non è un creatore';
+    END IF;
+END //
+DELIMITER ;
+
 -- Stored Procedure per aggiungere una skill al curriculum con controllo livello
 DELIMITER //
 CREATE PROCEDURE AggiungiSkillCurriculum(
