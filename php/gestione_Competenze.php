@@ -4,7 +4,7 @@ require 'config.php';
 
 // Controlla se l'utente è loggato
 if (!isset($_SESSION['user'])) {
-    header("Location: login.php");
+    header("Location: login/login.php");
     exit;
 }
 

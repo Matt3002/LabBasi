@@ -39,7 +39,8 @@ echo "<a href='logout.php'>Logout</a>";*/
         <a href="#" onclick="toggleMenu()">Inserisci Skill</a>
         <a href="#" onclick="toggleMenu()">Progetti Disponibili</a>
         <a href="#" onclick="toggleMenu()">Finanzia un Progetto</a>
-    <!--- metti funzioni admin--->
+        <div class="divider"></div>
+        <a href="../gestione_Competenze.php" onclick="toggleMenu()">Gestione Competenze</a>
     </div>
 
     <section class="content">

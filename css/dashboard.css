@@ -23,7 +23,7 @@ header a{
 
 .menu { 
     position: fixed;
-    top: 20px; 
+    top: 2vh; 
     left: 30px; 
     cursor: pointer; 
     font-size: 24px; 
@@ -48,13 +48,20 @@ header a{
     display: block; 
     color: green; 
     text-decoration: none; 
-    padding: 10px 0; 
+    padding: 1vh 1vw 1vh; 
+    max-width: fit-content;
 }
 
 .sidebar a:hover { 
     background: lightgreen; 
 }
         
+.sidebar .divider { 
+    border-top: medium solid lightgreen; 
+    margin: 5vh 0; 
+    max-width: 200px;
+}
+
 .content { padding: 30vh 5vw 20vh 10vw;}
         
 .stats { 

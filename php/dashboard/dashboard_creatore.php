@@ -39,7 +39,12 @@ echo "<a href='logout.php'>Logout</a>";*/
         <a href="#" onclick="toggleMenu()">Inserisci Skill</a>
         <a href="#" onclick="toggleMenu()">Progetti Disponibili</a>
         <a href="#" onclick="toggleMenu()">Finanzia un Progetto</a>
-        <!--- metti funzioni admin--->
+        <div class="divider"></div>
+        <a href="#" onclick="toggleMenu()">Inserisci Progetto</a>
+        <a href="#" onclick="toggleMenu()">Inserisci Reward</a>
+        <a href="#" onclick="toggleMenu()">Rispondi ai commenti</a>
+        <a href="#" onclick="toggleMenu()">Inserisci Profilo</a>
+        <a href="#" onclick="toggleMenu()">Gestione Candidature</a>
     </div>
 
     <section class="content">
