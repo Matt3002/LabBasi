@@ -41,6 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html>
 <head>
     <title>Registrazione Utente</title>
+    <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>
     <!-- Form per la registrazione dell'utente -->

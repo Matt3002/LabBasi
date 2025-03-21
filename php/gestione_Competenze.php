@@ -3,13 +3,13 @@ session_start();
 require 'config.php';
 
 // Controlla se l'utente è loggato
-if (!isset($_SESSION['user'])) {
-    header("Location: login/login.php");
+if (!isset($_SESSION['user_email'])) {
+    header("Location: login/loginAmministratore.php");
     exit;
 }
 
 // Controlla se l'utente è un amministratore
-$email = $_SESSION['user'];
+$email = $_SESSION['user_email'];
 $stmt = $pdo->prepare("SELECT * FROM Amministratore WHERE email_Utente = ?");
 $stmt->execute([$email]);
 $admin = $stmt->fetch(PDO::FETCH_ASSOC);
