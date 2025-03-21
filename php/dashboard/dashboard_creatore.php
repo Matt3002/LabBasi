@@ -35,13 +35,13 @@ echo "<a href='logout.php'>Logout</a>";*/
 <body>
     
     <div class="menu" onclick="toggleMenu()">☰</div>
-    <header><h1><a href="dashboard.php">Bostarter</a></h1></header>
+    <header><h1><a href="dashboard_creatore.php">Bostarter</a></h1></header>
     <div id="sidebar" class="sidebar">
         <a href="../inserisci_Skill.php" onclick="toggleMenu()">Inserisci Skill</a>
         <a href="../visualizza_Progetti.php" onclick="toggleMenu()">Progetti Disponibili</a>
         <a href="../finanzia_Progetto.php" onclick="toggleMenu()">Finanzia un Progetto</a>
         <div class="divider"></div>
-        <a href="#" onclick="toggleMenu()">Inserisci Progetto</a>
+        <a href="../inserisci_Progetto.php" onclick="toggleMenu()">Inserisci Progetto</a>
         <a href="#" onclick="toggleMenu()">Inserisci Reward</a>
         <a href="#" onclick="toggleMenu()">Rispondi ai commenti</a>
         <a href="#" onclick="toggleMenu()">Inserisci Profilo</a>

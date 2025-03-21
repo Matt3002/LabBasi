@@ -61,7 +61,9 @@
                         echo "<p>Email Creatore: " . $row['email_Creatore'] . "</p>";
                         echo "<div class='project-actions'>";
                         echo "<button>Lascia un commento</button>";
-                        echo "<button>Invia candidatura</button>";
+                        if($row['tipo']=="software"){
+                            echo "<button>Invia candidatura</button>";
+                        }
                         echo "</div></div></div>";
                     }
                 } else {
