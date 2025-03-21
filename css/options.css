@@ -1,0 +1,49 @@
+.form-section { 
+    margin: 20px; 
+    padding: 20px; 
+    background: #e0e0e0; 
+    border-radius: 8px; 
+    text-align: center; 
+}
+
+.form-section form { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; 
+    max-width: 300px; 
+    margin: auto; 
+}
+        
+.form-section input, .form-section select, .form-section button { 
+    padding: 10px; 
+    font-size: 16px; 
+}
+
+.project-card { 
+    display: flex; 
+    border: 1px solid #ccc; 
+    border-radius: 8px; 
+    overflow: hidden; 
+    margin: 20px 0; 
+}
+
+.project-card img { 
+    width: 150px; 
+    height: auto; 
+    object-fit: cover; 
+}
+        
+.project-info { 
+    padding: 15px; 
+    flex: 1; 
+}
+        
+.project-info h3 { margin: 0 0 10px; }
+.project-info p { margin: 5px 0; }
+.project-actions { margin-top: 10px; }
+
+.project-actions button { 
+    padding: 10px; 
+    margin-right: 5px; 
+    cursor: pointer; 
+}

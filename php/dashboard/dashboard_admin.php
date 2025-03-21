@@ -17,6 +17,7 @@ echo "<a href='logout.php'>Logout</a>";*/
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bostarter</title>
     <link rel="stylesheet" href="../../css/dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <script>
         function toggleMenu() {
             let sidebar = document.getElementById("sidebar");
@@ -36,9 +37,9 @@ echo "<a href='logout.php'>Logout</a>";*/
     <div class="menu" onclick="toggleMenu()">☰</div>
     <header><h1><a href="dashboard.php">Bostarter</a></h1></header>
     <div id="sidebar" class="sidebar">
-        <a href="#" onclick="toggleMenu()">Inserisci Skill</a>
-        <a href="#" onclick="toggleMenu()">Progetti Disponibili</a>
-        <a href="#" onclick="toggleMenu()">Finanzia un Progetto</a>
+        <a href="../inserisci_Skill.php" onclick="toggleMenu()">Inserisci Skill</a>
+        <a href="../visualizza_Progetti.php" onclick="toggleMenu()">Progetti Disponibili</a>
+        <a href="../finanzia_Progetto.php" onclick="toggleMenu()">Finanzia un Progetto</a>
         <div class="divider"></div>
         <a href="../gestione_Competenze.php" onclick="toggleMenu()">Gestione Competenze</a>
     </div>
@@ -121,5 +122,31 @@ echo "<a href='logout.php'>Logout</a>";*/
             </div>
         </div>
     </section>
+
+    <footer id="footerBase">
+
+        <div id="column">
+            <h4 id="wpp">Bostarter</h4>
+
+            <div id="contatti">
+                <a href="mailto:valeria.sensini2@studio.unibo.it"><h4>Contattaci</h4></a>
+                <h6>email: admin123@email.com </h6>
+            </div>
+
+            <div id="icon">
+                <h4>Seguici</h4>
+                <a href="#" style="margin-right: 2.4vw;"><i class="fab fa-facebook"></i></a>
+                <span></span>
+                <a href="#" style="margin-right: 2.4vw;"><i class="fab fa-instagram"></i></a>
+                <span></span>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+            </div>
+        </div>
+
+        <div id="diritti">
+            <p>© 2025 Bostarter. Tutti i diritti riservati.</p>
+        </div>
+
+    </footer>
 </body>
 </html>
