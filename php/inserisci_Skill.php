@@ -40,7 +40,9 @@ if ($emailSession) {
         $stmt->bind_param("ssi", $emailSession, $competenza, $livello);
 
         if ($stmt->execute()) {
-            $esito = "<p class='success'>Skill aggiunta con successo!</p>";
+            // Refresh automatico della pagina per aggiornare la lista
+            header("Location:inserisci_Skill.php");
+            exit();
         } else {
             $esito = "<p class='error'>Errore: la skill è già presente o il livello non è valido.</p>";
         }
