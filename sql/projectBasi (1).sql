@@ -321,6 +321,20 @@ BEGIN
 END //
 DELIMITER ;
 
+-- Stored Procedure per visualizzare le skill che non hai ancora aggiunto
+DELIMITER //
+CREATE PROCEDURE VisualizzaSkillDisponibili(IN p_email VARCHAR(50))
+BEGIN
+    SELECT S.competenza
+    FROM Skill S
+    WHERE S.competenza NOT IN (
+        SELECT C.nome_Competenza
+        FROM Curriculum C
+        WHERE C.email_Utente = p_email
+    );
+END //
+DELIMITER ;
+
 -- Stored Procedure per visualizzare i progetti disponibili
 DELIMITER //
 CREATE PROCEDURE VisualizzaProgetti()

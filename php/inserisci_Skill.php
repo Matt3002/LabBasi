@@ -1,3 +1,57 @@
+<?php
+session_start();
+require 'config.php';
+
+$emailSession = isset($_SESSION['user_email']) ? $_SESSION['user_email'] : null;
+$skillOptions = '';
+$hasAvailableSkills = false;
+$esito = '';
+
+if ($emailSession) {
+    $conn = new mysqli($host, $username, $password, $dbname);
+    if ($conn->connect_error) {
+        die("Connessione fallita: " . $conn->connect_error);
+    }
+
+    // Recupero delle skill disponibili
+    $stmt = $conn->prepare("CALL VisualizzaSkillDisponibili(?)");
+    $stmt->bind_param("s", $emailSession);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows === 0) {
+        $skillOptions = "<option disabled>Tutte le skill sono già state aggiunte</option>";
+    } else {
+        $hasAvailableSkills = true;
+        while ($row = $result->fetch_assoc()) {
+            $competenza = htmlspecialchars($row['competenza']);
+            $skillOptions .= "<option value='{$competenza}'>{$competenza}</option>";
+        }
+    }
+
+    $stmt->close();
+
+    // Gestione form submit
+    if (isset($_POST['submit']) && $hasAvailableSkills) {
+        $competenza = $_POST['competenza'];
+        $livello = $_POST['livello'];
+
+        $stmt = $conn->prepare("CALL AggiungiSkillCurriculum(?, ?, ?)");
+        $stmt->bind_param("ssi", $emailSession, $competenza, $livello);
+
+        if ($stmt->execute()) {
+            $esito = "<p class='success'>Skill aggiunta con successo!</p>";
+        } else {
+            $esito = "<p class='error'>Errore: la skill è già presente o il livello non è valido.</p>";
+        }
+
+        $stmt->close();
+    }
+
+    $conn->close();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -7,6 +61,10 @@
     <link rel="stylesheet" href="../css/dashboard.css">
     <link rel="stylesheet" href="../css/options.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        .success { color: green; }
+        .error { color: red; }
+    </style>
     <script>
         function toggleMenu() {
             let sidebar = document.getElementById("sidebar");
@@ -22,9 +80,10 @@
     </script>
 </head>
 <body>
-    
+
     <div class="menu" onclick="toggleMenu()">☰</div>
     <header><h1><a href="dashboard/dashboard.php">Bostarter</a></h1></header>
+
     <div id="sidebar" class="sidebar">
         <a href="inserisci_Skill.php" onclick="toggleMenu()">Inserisci Skill</a>
         <a href="visualizza_Progetti.php" onclick="toggleMenu()">Progetti Disponibili</a>
@@ -32,76 +91,56 @@
     </div>
 
     <div class="content">
-    <section class="form-section">
+        <section class="form-section">
             <h3>Aggiungi una Skill al Curriculum</h3>
-            <form method="post">
-                <input type="email" name="email" placeholder="Email Utente" required>
-                <input type="text" name="competenza" placeholder="Nome Competenza" required> <!--- scegliere tra comp esistenti--->
-                <select name="livello" required>
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select><br>
-                <button type="submit" name="submit">Aggiungi Skill</button>
-            </form> <!---funziona ma va gestito caso in cui si stia inserendo una coppia comp-livello gia esistente per quell'utente--->
-            <?php
-                if (isset($_POST['submit'])) {
-                    require 'config.php';
+            <?php echo $esito; ?>
 
-                    error_reporting(E_ALL);
-                    ini_set('display_errors', 1);
+            <?php if ($emailSession): ?>
+                <form method="post">
+                    <label for="competenza">Skill disponibili</label>
+                    <select name="competenza" id="competenza" required <?php if (!$hasAvailableSkills) echo 'disabled'; ?>>
+                        <option value="">-- Seleziona una competenza --</option>
+                        <?php echo $skillOptions; ?>
+                    </select>
 
-                        $conn = new mysqli($host, $username, $password, $dbname);
-                        if ($conn->connect_error) {
-                            die("Connessione fallita: " . $conn->connect_error);
-                        }
-                    $email = $_POST['email'];
-                    $competenza = $_POST['competenza'];
-                    $livello = $_POST['livello'];
-                    
-                    $stmt = $conn->prepare("CALL AggiungiSkillCurriculum(?, ?, ?)");
-                    $stmt->bind_param("ssi", $email, $competenza, $livello);
-                    
-                    if ($stmt->execute()) {
-                        echo "<p>Skill aggiunta con successo!</p>";
-                    } else {
-                        echo "<p>Errore: " . $stmt->error . "</p>";
-                    }
-                    
-                    $stmt->close();
-                    $conn->close();
-                }
-            ?>
-    </section>
+                    <label for="livello">Livello</label>
+                    <select name="livello" id="livello" required>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select><br>
+
+                    <button type="submit" name="submit" <?php if (!$hasAvailableSkills) echo 'disabled'; ?>>
+                        Aggiungi Skill
+                    </button>
+                </form>
+            <?php else: ?>
+                <p class="error">Errore: sessione utente non attiva. Effettua il login.</p>
+            <?php endif; ?>
+        </section>
     </div>
 
     <footer id="footerBase">
-
         <div id="column">
             <h4 id="wpp">Bostarter</h4>
-
             <div id="contatti">
                 <a href="mailto:valeria.sensini2@studio.unibo.it"><h4>Contattaci</h4></a>
                 <h6>email: admin123@email.com </h6>
             </div>
-
             <div id="icon">
                 <h4>Seguici</h4>
                 <a href="#" style="margin-right: 2.4vw;"><i class="fab fa-facebook"></i></a>
-                <span></span>
                 <a href="#" style="margin-right: 2.4vw;"><i class="fab fa-instagram"></i></a>
-                <span></span>
                 <a href="#"><i class="fab fa-tiktok"></i></a>
             </div>
         </div>
-
         <div id="diritti">
             <p>© 2025 Bostarter. Tutti i diritti riservati.</p>
         </div>
-
     </footer>
+
 </body>
 </html>
