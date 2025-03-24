@@ -43,7 +43,7 @@ echo "<a href='logout.php'>Logout</a>";*/
         <div class="divider"></div>
         <a href="../inserisci_Progetto.php" onclick="toggleMenu()">Inserisci Progetto</a>
         <a href="#" onclick="toggleMenu()">Inserisci Reward</a>
-        <a href="#" onclick="toggleMenu()">Rispondi ai commenti</a>
+        <a href="../miei_Progetti.php" onclick="toggleMenu()">I tuoi progetti</a>
         <a href="#" onclick="toggleMenu()">Inserisci Profilo</a>
         <a href="#" onclick="toggleMenu()">Gestione Candidature</a>
     </div>

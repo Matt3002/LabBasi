@@ -343,6 +343,16 @@ BEGIN
 END //
 DELIMITER ;
 
+-- Stored Procedure per visualizzare i tuoi progetti
+DELIMITER //
+CREATE PROCEDURE VisualizzaProgettiCreati(IN p_email_creatore VARCHAR(255))
+BEGIN
+    SELECT * 
+    FROM Progetto 
+    WHERE email_Creatore = p_email_creatore;
+END //
+DELIMITER ;
+
 
 -- Stored Procedure per finanziare un progetto con controllo sull'importo
 DELIMITER //
@@ -416,6 +426,17 @@ CREATE PROCEDURE AggiungiCommento(
 BEGIN
     INSERT INTO Commento (email_Utente, nome_Progetto, data, testo)
     VALUES (p_email_Utente, p_nome_Progetto, p_data, p_testo);
+END //
+DELIMITER ;
+
+-- Stored Procedure per visualizzare i commenti relativi a un progetto
+DELIMITER //
+CREATE PROCEDURE VisualizzaCommentiProgetto(IN p_nome_progetto VARCHAR(50))
+BEGIN
+    SELECT email_Utente, data, testo 
+    FROM Commento 
+    WHERE nome_Progetto = p_nome_progetto
+    ORDER BY data DESC; -- Ordina i commenti dal più recente al più vecchio
 END //
 DELIMITER ;
 
