@@ -115,9 +115,9 @@ if (isset($_POST['submit_commento']) && $emailSession) {
                         echo "<div class='project-actions'>";
                         echo "<button onclick=\"toggleCommentSection('$progettoNome')\">Lascia un commento</button>";
                         if($row['tipo'] == "software") {
-                            echo "<button onclick=\"location.href='candidati_Progetto.php?progetto=" . urlencode($row['nome']) . "'\">Invia candidatura</button>";
+                            echo "<button onclick=\"location.href='visualizza_Profili.php" . urlencode($row['nome']) . "'\">Invia candidatura</button>";
                         }
-                        echo "<button onclick=\"location.href='finanzia_Progetto.php?progetto=" . urlencode($row['nome']) . "'\">Finanzia Progetto</button>";
+                        echo "<button onclick=\"location.href='finanzia_Progetto.php" . urlencode($row['nome']) . "'\">Finanzia Progetto</button>";
                         echo "</div>";
 
                         // Sezione commento nascosta di default

@@ -112,8 +112,6 @@ engine= "InnoDB";
 CREATE TABLE Profilo (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(50) NOT NULL,
-    nome_Software VARCHAR(50) NOT NULL,
-    FOREIGN KEY (nome_Software) REFERENCES Software(nome_progetto)
 )
 engine= "InnoDB";
 
