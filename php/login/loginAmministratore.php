@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../../css/styleLogin.css">
-    <title>Login Creatore</title>
+    <title>Login Amministratore</title>
     <style>
         .error-msg {
             color: red;
