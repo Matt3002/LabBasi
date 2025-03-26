@@ -1,4 +1,3 @@
-aggiungi competenza non gestisce il caso in cui la competenza esista già, riguardare procedure o gestire in altro modo
 valutare htaccess per impedire di accedere direttamente alla pagine
 i controlli nelle pagine delle opzioni sono necessari? se tu puoi accedervi solo dalla dashboard è ovvio che sei amministratore e sei già loggato
 quando sei su un'operazione "speciale" tipo quelle del creatore nella sidebar non vedi le altre operazioni "speciali"

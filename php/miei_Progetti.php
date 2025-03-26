@@ -86,12 +86,36 @@ $result = $stmt->get_result();
                     echo "<h4>Commenti:</h4>";
                     if ($resultCommenti->num_rows > 0) {
                         while ($commento = $resultCommenti->fetch_assoc()) {
+                            echo "<div class='comment'>";
                             echo "<p><strong>" . htmlspecialchars($commento['email_Utente']) . ":</strong> " . htmlspecialchars($commento['testo']) . " <br><em>Data: " . $commento['data'] . "</em></p><br>";
+                            echo"</div>";
                         }
                     } else {
                         echo "<p>Nessun commento per questo progetto.</p>";
                     }
                     echo "</div>";
+                    $conn2 = new mysqli($host, $username, $password, $dbname);
+                            if ($conn2->connect_error) {
+                                die("Connessione fallita: " . $conn2->connect_error);
+                            }
+        
+                            $stmtRisposta = $conn2->prepare("SELECT risposta FROM Risposta WHERE id_Commento = ?;");
+                            $stmtRisposta->bind_param("s", $commento['id']);
+                            $stmtRisposta->execute();
+                            $resultRisposta = $stmtRisposta->get_result();
+                            echo "<p>debug1</p>";
+                                    // Controlla se il commento ha già una risposta
+                                    if ($rowRisposta = $resultRisposta->fetch_assoc()) {
+                                        echo "<p class='reply'><strong>Risposta:</strong> " . htmlspecialchars($rowRisposta['risposta']) . "</p>";
+                                    } else {
+                                        echo "<button class='reply-btn' data-comment-id='" . $commento['id'] . "'>Rispondi</button>";
+                                        echo "<div class='reply-box' id='reply-box-" . $commento['id'] . "'>";
+                                        echo "<input type='text' class='reply-input' id='reply-input-" . $commento['id'] . "' placeholder='Scrivi una risposta...'>";
+                                        echo "<button class='submit-reply' data-comment-id='" . $commento['id'] . "'>Invia</button>";
+                                        echo "</div>";
+                                    }
+                                    $stmtRisposta->close();
+                                    $conn2->close();
 
                     $stmtCommenti->close();
                     $conn1->close();
