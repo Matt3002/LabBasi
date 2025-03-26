@@ -31,12 +31,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("ss", $email, $codice_sicurezza);
         
         if ($stmt->execute()) {
-            echo "Registrazione amministratore completata con successo!";
+            echo "<script>
+            alert('Registrazione amministratore completata con successo! Ora verrai reindirizzato al login.');
+            window.location.href = 'loginAmministratore.php';
+          </script>";
         } else {
-            echo "Errore nell'aggiunta del codice di sicurezza: " . $stmt->error;
+            echo "<script>
+                alert('Errore nell' aggiunta del codice di sicurezza: " . addslashes($stmt->error) . "');
+              </script>";
         }
     } else {
-        echo "Errore nella registrazione: " . $stmt->error;
+        echo "<script>
+                alert('Errore nella registrazione: " . addslashes($stmt->error) . "');
+              </script>";
     }
     
     // Chiusura dello statement e della connessione

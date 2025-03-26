@@ -122,7 +122,8 @@ if (isset($_POST['submit_commento']) && $emailSession) {
                         if($row['tipo'] == "software") {
                             echo "<button onclick=\"location.href='visualizza_Profili.php?nome_progetto=" . urlencode($progettoNome) . "'\">Invia candidatura</button>";
                         }
-                        echo "<button onclick=\"location.href='finanzia_Progetto.php" . urlencode($row['nome']) . "'\">Finanzia Progetto</button>";
+                        echo "<button onclick=\"location.href='finanzia_progetto.php?nome_progetto=" . urlencode($row['nome']) . "'\">Finanzia Progetto</button>";
+
                         echo "</div>";
 
                         // Sezione commento nascosta di default

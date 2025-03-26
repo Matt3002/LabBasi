@@ -26,9 +26,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // Esecuzione della query e gestione dell'esito
     if ($stmt->execute()) {
-        echo "Registrazione completata con successo!";
+        echo "<script>
+                alert('Registrazione completata con successo! Ora verrai reindirizzato al login.');
+                window.location.href = '../login/login.php';
+              </script>";
+        exit();
     } else {
-        echo "Errore nella registrazione: " . $stmt->error;
+        echo "<script>
+                alert('Errore nella registrazione: " . $stmt->error . "');
+              </script>";
     }
     
     // Chiusura dello statement e della connessione
