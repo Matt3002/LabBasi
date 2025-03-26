@@ -105,7 +105,7 @@ $conn->close();
 
                                     // Controlla se il commento ha già una risposta
                                     if ($rowRisposta = $resultRisposta->fetch_assoc()) {
-                                        echo "<p class='reply'><strong>Risposta:</strong> " . htmlspecialchars($rowRisposta['testo']) . "</p>";
+                                        echo "<p class='reply'><strong>    Risposta:</strong> " . htmlspecialchars($rowRisposta['testo']) . "</p><br>";
                                     } else {
                                         echo "<div class='reply-box' id='reply-box-" . $commento['id'] . "'>";
                                         echo "<input type='text' class='reply-input' id='reply-input-" . $commento['id'] . "' placeholder='Scrivi una risposta...'>";
@@ -149,6 +149,31 @@ $conn->close();
             <p>© 2025 Bostarter. Tutti i diritti riservati.</p>
         </div>
     </footer>
+    <script>
+        document.querySelectorAll('.submit-reply').forEach(button => {
+            button.addEventListener('click', function() {
+                const commentId = this.dataset.commentId;
+                const replyText = document.getElementById(`reply-input-${commentId}`).value;
+                const formData = new FormData();
+                
+                formData.append('commentId', commentId);
+                formData.append('testo', replyText);
 
+                fetch('rispondi_commento.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    if(data === 'success') {
+                        location.reload(); // Ricarica la pagina per vedere la risposta
+                    } else {
+                        alert('Errore: ' + data);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+        </script>
 </body>
 </html>
