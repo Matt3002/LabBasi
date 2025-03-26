@@ -17,6 +17,8 @@ $stmt = $conn->prepare("CALL VisualizzaProgettiCreati(?)");
 $stmt->bind_param("s", $emailSession);
 $stmt->execute();
 $result = $stmt->get_result();
+$stmt->close();
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -81,52 +83,50 @@ $result = $stmt->get_result();
                     $stmtCommenti->bind_param("s", $progetto['nome']);
                     $stmtCommenti->execute();
                     $resultCommenti = $stmtCommenti->get_result();
-
+                    $stmtCommenti->close();
+                    $conn1->close();  
                     echo "<div class='comment-section'>";
                     echo "<h4>Commenti:</h4>";
                     if ($resultCommenti->num_rows > 0) {
                         while ($commento = $resultCommenti->fetch_assoc()) {
                             echo "<div class='comment'>";
-                            echo "<p><strong>" . htmlspecialchars($commento['email_Utente']) . ":</strong> " . htmlspecialchars($commento['testo']) . " <br><em>Data: " . $commento['data'] . "</em></p><br>";
+                            echo "<p><strong>" . htmlspecialchars($commento['email_Utente']) . ":</strong> " . htmlspecialchars($commento['testo']) . " <br><em>Data: " . $commento['data'] . "</em></p>";
+                            $conn2 = new mysqli($host, $username, $password, $dbname);
+                            if ($conn2->connect_error) {
+                                die("Connessione fallita: " . $conn2->connect_error);
+                            }
+                            
+                            $stmtRisposta = $conn2->prepare("SELECT testo FROM Risposta WHERE id_Commento = ?;");
+                            $stmtRisposta->bind_param("i", $commento['id']);
+                            $stmtRisposta->execute();
+                            $resultRisposta = $stmtRisposta->get_result();
+                            $stmtRisposta->close();
+                            $conn2->close();
+
+                                    // Controlla se il commento ha già una risposta
+                                    if ($rowRisposta = $resultRisposta->fetch_assoc()) {
+                                        echo "<p class='reply'><strong>    Risposta:</strong> " . htmlspecialchars($rowRisposta['testo']) . "</p><br>";
+                                    } else {
+                                        echo "<div class='reply-box' id='reply-box-" . $commento['id'] . "'>";
+                                        echo "<input type='text' class='reply-input' id='reply-input-" . $commento['id'] . "' placeholder='Scrivi una risposta...'>";
+                                        echo "<button class='submit-reply' data-comment-id='" . $commento['id'] . "'>Invia</button>";
+                                        echo "</div><br>";
+                                    }
+                                    
                             echo"</div>";
                         }
                     } else {
                         echo "<p>Nessun commento per questo progetto.</p>";
                     }
-                    echo "</div>";
-                    $conn2 = new mysqli($host, $username, $password, $dbname);
-                            if ($conn2->connect_error) {
-                                die("Connessione fallita: " . $conn2->connect_error);
-                            }
-        
-                            $stmtRisposta = $conn2->prepare("SELECT risposta FROM Risposta WHERE id_Commento = ?;");
-                            $stmtRisposta->bind_param("s", $commento['id']);
-                            $stmtRisposta->execute();
-                            $resultRisposta = $stmtRisposta->get_result();
-                            echo "<p>debug1</p>";
-                                    // Controlla se il commento ha già una risposta
-                                    if ($rowRisposta = $resultRisposta->fetch_assoc()) {
-                                        echo "<p class='reply'><strong>Risposta:</strong> " . htmlspecialchars($rowRisposta['risposta']) . "</p>";
-                                    } else {
-                                        echo "<button class='reply-btn' data-comment-id='" . $commento['id'] . "'>Rispondi</button>";
-                                        echo "<div class='reply-box' id='reply-box-" . $commento['id'] . "'>";
-                                        echo "<input type='text' class='reply-input' id='reply-input-" . $commento['id'] . "' placeholder='Scrivi una risposta...'>";
-                                        echo "<button class='submit-reply' data-comment-id='" . $commento['id'] . "'>Invia</button>";
-                                        echo "</div>";
-                                    }
-                                    $stmtRisposta->close();
-                                    $conn2->close();
-
-                    $stmtCommenti->close();
-                    $conn1->close();
+                    echo "</div>";  
+                                
                     echo "</div></div>"; // Fine project-card
                 }
             } else {
                 echo "<p>Non hai ancora creato nessun progetto.</p>";
             }
 
-            $stmt->close();
-            $conn->close();
+
             ?>
         </section>
     </div>
@@ -149,6 +149,31 @@ $result = $stmt->get_result();
             <p>© 2025 Bostarter. Tutti i diritti riservati.</p>
         </div>
     </footer>
+    <script>
+        document.querySelectorAll('.submit-reply').forEach(button => {
+            button.addEventListener('click', function() {
+                const commentId = this.dataset.commentId;
+                const replyText = document.getElementById(`reply-input-${commentId}`).value;
+                const formData = new FormData();
+                
+                formData.append('commentId', commentId);
+                formData.append('testo', replyText);
 
+                fetch('rispondi_commento.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(data => {
+                    if(data === 'success') {
+                        location.reload(); // Ricarica la pagina per vedere la risposta
+                    } else {
+                        alert('Errore: ' + data);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+        </script>
 </body>
 </html>
