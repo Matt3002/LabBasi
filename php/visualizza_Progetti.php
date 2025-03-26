@@ -1,6 +1,8 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 require 'config.php';
-
 $emailSession = isset($_SESSION['user_email']) ? $_SESSION['user_email'] : null;
 $esito = '';
 
@@ -89,6 +91,9 @@ if (isset($_POST['submit_commento']) && $emailSession) {
             <h2>Progetti Disponibili</h2>
             <?php echo $esito; ?>
             <?php
+            ini_set('display_errors', 1);
+            ini_set('display_startup_errors', 1);
+            error_reporting(E_ALL);
                 require 'config.php';
 
                 $conn = new mysqli($host, $username, $password, $dbname);
@@ -115,7 +120,7 @@ if (isset($_POST['submit_commento']) && $emailSession) {
                         echo "<div class='project-actions'>";
                         echo "<button onclick=\"toggleCommentSection('$progettoNome')\">Lascia un commento</button>";
                         if($row['tipo'] == "software") {
-                            echo "<button onclick=\"location.href='visualizza_Profili.php" . urlencode($row['nome']) . "'\">Invia candidatura</button>";
+                            echo "<button onclick=\"location.href='visualizza_Profili.php?nome_progetto=" . urlencode($progettoNome) . "'\">Invia candidatura</button>";
                         }
                         echo "<button onclick=\"location.href='finanzia_Progetto.php" . urlencode($row['nome']) . "'\">Finanzia Progetto</button>";
                         echo "</div>";

@@ -101,17 +101,11 @@ CREATE TABLE Lista_Componenti (
 )
 engine= "InnoDB";
 
--- Tabella Software
-CREATE TABLE Software (
-    nome_Progetto VARCHAR(50) PRIMARY KEY,
-    FOREIGN KEY (nome_Progetto) REFERENCES Progetto(nome)
-)
-engine= "InnoDB";
 
 -- Tabella Profilo
 CREATE TABLE Profilo (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(50) NOT NULL,
+    nome VARCHAR(50) NOT NULL
 )
 engine= "InnoDB";
 
@@ -119,7 +113,7 @@ CREATE TABLE Profilo_Software(
 	nome_Software VARCHAR(50),
     id_Profilo INT AUTO_INCREMENT,
 	PRIMARY KEY (nome_Software, id_Profilo),
-    FOREIGN KEY (nome_Software) REFERENCES Software(nome_progetto),
+    FOREIGN KEY (nome_Software) REFERENCES Progetto(nome),
     FOREIGN KEY (id_Profilo) REFERENCES Profilo(id)
 )
 engine= "InnoDB";
@@ -203,7 +197,15 @@ INSERT INTO Skill (competenza, email_Amministratore) VALUES
 ('Python', 'mario.rossi@email.com'),
 ('Java', 'lucia.bianchi@email.com'),
 ('HTML', 'mario.rossi@email.com'),
-('AI', 'lucia.bianchi@email.com');
+('AI', 'lucia.bianchi@email.com'),
+('Machine Learning', 'lucia.bianchi@email.com'),
+('PHP', 'mario.rossi@email.com'),
+('ReactJS', 'lucia.bianchi@email.com'),
+('Cybersecurity', 'lucia.bianchi@email.com'),
+('Big Data', 'lucia.bianchi@email.com'),
+('UX Design', 'lucia.bianchi@email.com'),
+('Networking', 'lucia.bianchi@email.com'),
+('Blockchain', 'lucia.bianchi@email.com');
 
 -- Inserimento dati nella tabella Curriculum
 INSERT INTO Curriculum (email_Utente, nome_Competenza, livello) VALUES
@@ -220,7 +222,13 @@ INSERT INTO Creatore (email_Utente, nr_progetti, affidabilita) VALUES
 -- Inserimento dati nella tabella Progetto
 INSERT INTO Progetto (nome, descrizione, data_Inserimento, budget, data_Limite, stato, tipo, email_Creatore) VALUES
 ('Smartwatch AI', 'Un nuovo smartwatch con AI integrata', '2025-02-01', 10000.00, '2025-06-01', 'aperto', 'hardware', 'giovanni.verdi@email.com'),
-('E-commerce Sicuro', 'Piattaforma di e-commerce con AI', '2025-01-10', 15000.00, '2025-05-15', 'aperto', 'software', 'anna.neri@email.com');
+('E-commerce Sicuro', 'Piattaforma di e-commerce con AI', '2025-01-10', 15000.00, '2025-05-15', 'aperto', 'software', 'anna.neri@email.com'),
+('App Fitness AI', 'Applicazione mobile per il fitness con AI personalizzata', '2025-03-05', 12000.00, '2025-07-10', 'aperto', 'software', 'giovanni.verdi@email.com'),
+('CyberShield', 'Sistema avanzato di protezione per reti aziendali', '2025-02-20', 20000.00, '2025-09-01', 'aperto', 'hardware', 'anna.neri@email.com'),
+('SmartHome Hub', 'Dispositivo IoT per la gestione della casa intelligente', '2025-04-15', 8000.00, '2025-08-20', 'aperto', 'hardware', 'giovanni.verdi@email.com'),
+('Social Learning Platform', 'Piattaforma social per l apprendimento collaborativo', '2025-01-25', 18000.00, '2025-06-30', 'aperto', 'software', 'anna.neri@email.com'),
+('VR Therapy', 'Applicazione di realtà virtuale per terapia psicologica', '2025-02-18', 22000.00, '2025-10-05', 'aperto', 'software', 'giovanni.verdi@email.com'),
+('E-Payment Blockchain', 'Sistema di pagamento digitale basato su blockchain', '2025-03-12', 25000.00, '2025-12-01', 'aperto', 'software', 'anna.neri@email.com');
 
 -- Inserimento dati nella tabella Reward
 INSERT INTO Reward (descrizione, foto, nome_Progetto) VALUES
@@ -236,6 +244,100 @@ INSERT INTO Finanziamento (email_Utente, nome_Progetto, importo, data, codice_Re
 INSERT INTO Commento (email_Utente, nome_Progetto, data, testo) VALUES
 ('paolo.gialli@email.com', 'Smartwatch AI', '2025-02-10', 'Idea interessante!'),
 ('lucia.bianchi@email.com', 'E-commerce Sicuro', '2025-02-12', 'Sembra promettente!');
+
+
+INSERT INTO Profilo (nome) VALUES 
+('Esperto AI'),
+('Sviluppatore Backend'),
+('UI/UX Designer'),
+('Cybersecurity Analyst'),
+('Data Scientist'),
+('Full Stack Developer'),
+('Cloud Engineer'),
+('Cybersecurity Expert'),
+('Data Engineer'),
+('AI Researcher'),
+('DevOps Specialist'),
+('Frontend Developer'),
+('Backend Developer'),
+('Network Administrator'),
+('Blockchain Developer');
+
+INSERT INTO Profilo_Software (nome_Software, id_Profilo) VALUES
+-- Progetto: E-commerce Sicuro
+('E-commerce Sicuro', 2),  -- Sviluppatore Backend
+('E-commerce Sicuro', 3),  -- UI/UX Designer
+('E-commerce Sicuro', 7),  -- Frontend Developer
+
+-- Progetto: App Fitness AI
+('App Fitness AI', 1),  -- Esperto AI
+('App Fitness AI', 6),  -- DevOps Specialist
+('App Fitness AI', 8),  -- Backend Developer
+
+-- Progetto: Social Learning Platform
+('Social Learning Platform', 3),  -- UI/UX Designer
+('Social Learning Platform', 7),  -- Frontend Developer
+('Social Learning Platform', 8),  -- Backend Developer
+
+-- Progetto: VR Therapy
+('VR Therapy', 1),  -- Esperto AI
+('VR Therapy', 4),  -- Cybersecurity Analyst
+('VR Therapy', 10), -- Blockchain Developer
+
+-- Progetto: E-Payment Blockchain
+('E-Payment Blockchain', 10), -- Blockchain Developer
+('E-Payment Blockchain', 2),  -- Sviluppatore Backend
+('E-Payment Blockchain', 9);  -- Network Administrator
+ 
+
+INSERT INTO ProfiloSkill (id_Profilo, nome_Competenza, livello) VALUES
+-- Esperto AI
+(1, 'AI', 5),
+(1, 'Machine Learning', 5),
+(1, 'Big Data', 4),
+
+-- Sviluppatore Backend
+(2, 'Java', 5),
+(2, 'PHP', 4),
+
+
+-- UI/UX Designer
+(3, 'HTML', 5),
+(3, 'ReactJS', 4),
+(3, 'UX Design', 5),
+
+-- Cybersecurity Analyst
+(4, 'Cybersecurity', 5),
+(4, 'Networking', 4),
+
+-- Data Scientist
+(5, 'Python', 5),
+(5, 'Machine Learning', 4),
+(5, 'Big Data', 5),
+
+-- Full Stack Developer
+(6, 'Java', 5),
+(6, 'PHP', 5),
+(6, 'ReactJS', 4),
+(6, 'HTML', 5),
+
+-- Cloud Engineer
+(7, 'Networking', 4),
+(7, 'Cybersecurity', 3),
+(7, 'Big Data', 4),
+
+-- DevOps Specialist
+(8, 'Networking', 5),
+(8, 'Python', 4),
+(8, 'AI', 3),
+
+-- Blockchain Developer
+(9, 'Blockchain', 5),
+(9, 'Cybersecurity', 4),
+(9, 'Networking', 3);
+  
+
+
 
 
 -- Stored Procedure per registrare un nuovo utente con controlli
@@ -431,7 +533,7 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE VisualizzaCommentiProgetto(IN p_nome_progetto VARCHAR(50))
 BEGIN
-    SELECT email_Utente, data, testo 
+    SELECT *
     FROM Commento 
     WHERE nome_Progetto = p_nome_progetto
     ORDER BY data DESC; -- Ordina i commenti dal più recente al più vecchio
