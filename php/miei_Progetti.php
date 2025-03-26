@@ -45,6 +45,25 @@ $conn->close();
             padding-left: 10px;
             border-left: 3px solid #007BFF;
         }
+        .project-buttons {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .project-buttons a {
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            font-weight: bold;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+        .project-buttons a:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -66,6 +85,7 @@ $conn->close();
             <?php
             if ($result->num_rows > 0) {
                 while ($progetto = $result->fetch_assoc()) {
+                    $nomeProgetto = urlencode($progetto['nome']);
                     echo "<div class='project-card'>";
                     echo "<img src='images/default_project.jpg' alt='Immagine progetto'>";
                     echo "<div class='project-info'>";
@@ -119,7 +139,10 @@ $conn->close();
                         echo "<p>Nessun commento per questo progetto.</p>";
                     }
                     echo "</div>";  
-                                
+                    echo "<div class='project-buttons'>";
+                    echo "<a href='inserisci_profilo.php?progetto=$nomeProgetto'>Inserisci Profilo</a>";
+                    echo "<a href='gestisci_candidature.php?progetto=$nomeProgetto'>Gestisci Candidature</a>";
+                    echo "</div>";           
                     echo "</div></div>"; // Fine project-card
                 }
             } else {
