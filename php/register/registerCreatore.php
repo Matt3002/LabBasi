@@ -30,13 +30,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $conn->prepare("INSERT INTO Creatore (email_Utente, nr_progetti, affidabilita) VALUES (?, 0, ?)");
         $stmt->bind_param("si", $email, $affidabilita);
         
-        if ($stmt->execute()) {
-            echo "Registrazione creatore completata con successo!";
-        } else {
-            echo "Errore nell'aggiunta dell'affidabilità: " . $stmt->error;
-        }
+         echo "<script>
+            alert('Registrazione creatore completata con successo! Ora verrai reindirizzato al login.');
+            window.location.href = 'loginCreatore.php';
+          </script>";
+        
     } else {
-        echo "Errore nella registrazione: " . $stmt->error;
+        echo "<script>
+                alert('Errore nella registrazione: " . addslashes($stmt->error) . "');
+              </script>";
     }
     
     // Chiusura dello statement e della connessione
