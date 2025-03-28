@@ -101,11 +101,19 @@ $conn->close();
                     <h3><?php echo htmlspecialchars($profilo['nome_profilo']); ?></h3>
                     <p><strong>Competenze richieste:</strong></p>
                     <ul>
-                        <?php 
-                        $competenze_array = explode("; ", $profilo['competenze']);
-                        foreach ($competenze_array as $competenza): ?>
-                            <li><?php echo htmlspecialchars($competenza); ?></li>
-                        <?php endforeach; ?>
+                    <?php 
+                        $competenze_raw = $profilo['competenze'] ?? '';
+                        $competenze_array = array_filter(explode("; ", $competenze_raw)); // evita null e filtra stringhe vuote
+
+                        if (empty($competenze_array)) {
+                            echo "<li>Nessuna competenza richiesta.</li>";
+                        } else {
+                            foreach ($competenze_array as $competenza): ?>
+                                <li><?php echo htmlspecialchars($competenza); ?></li>
+                            <?php endforeach;
+                        }
+                    ?>
+
                     </ul>
                     <form action="invia_candidatura.php" method="POST">
                         <input type="hidden" name="nome_progetto" value="<?php echo htmlspecialchars($nome_progetto ?? '', ENT_QUOTES, 'UTF-8'); ?>">

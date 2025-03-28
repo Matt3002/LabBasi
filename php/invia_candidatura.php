@@ -31,21 +31,21 @@ if (empty($id_profilo) || empty($nome_progetto)) {
     exit();
 }
 
-// Chiamata alla procedura memorizzata
-
-$stmt = $conn->prepare("CALL InviaCandidatura(?, ?, ?)");
-$stmt->bind_param("sis", $email_utente, $id_profilo, $nome_progetto);
-
-if ($stmt->execute()) {
+try {
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT); // Abilita eccezioni
+    $stmt = $conn->prepare("CALL InviaCandidatura(?, ?, ?)");
+    $stmt->bind_param("sis", $email_utente, $id_profilo, $nome_progetto);
+    $stmt->execute();
     $_SESSION['success'] = "Candidatura inviata con successo!";
-} else {
-    $_SESSION['error'] = "Errore durante l'invio della candidatura.";
+    $stmt->close();
+} catch (mysqli_sql_exception $e) {
+    // Salva il messaggio di errore della procedura in sessione
+    $_SESSION['error'] = "" . $e->getMessage();
 }
 
-$stmt->close();
 $conn->close();
 
-// Reindirizza l'utente a `visualizza_Profili.php` dopo l'invio
+// Reindirizza alla pagina con i profili richiesti per il progetto
 header("Location: visualizza_Profili.php?nome_progetto=" . urlencode($nome_progetto));
 exit();
 ?>
