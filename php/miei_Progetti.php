@@ -144,7 +144,12 @@ $conn->close();
                         echo "<a href='inserisci_profilo.php?progetto=$nomeProgetto'>Inserisci Profilo</a>";
                         echo "<a href='gestisci_candidature.php?progetto=$nomeProgetto'>Gestisci Candidature</a>";
                         echo "</div>";
-                    }          
+                    }
+                    if ($progetto['tipo'] === 'hardware') {
+                        echo "<div class='project-buttons'>";
+                        echo "<a href='inserisci_componenti.php?progetto=$nomeProgetto'>Inserisci Componenti</a>";
+                        echo "</div>";
+                    }        
                     echo "</div></div>"; // Fine project-card
                 }
             } else {
