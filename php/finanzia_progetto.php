@@ -20,53 +20,129 @@ if (empty($nome_progetto)) {
     die("<script>alert('Errore: Nome progetto mancante.'); window.location.href = 'visualizza_Progetti.php';</script>");
 }
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Recupero dei dati inviati dal form
-    $email_utente = $_SESSION['user_email']; // L'utente loggato che finanzia
-    $nome_progetto = $_POST['nome_progetto'];
-    $importo = $_POST['importo'];
-    $data = date('Y-m-d'); // Data odierna
-    $codice_reward = $_POST['codice_reward'] ?? null; // Reward opzionale
+$email_utente = $_SESSION['user_email'];
 
-    // Controllo dei parametri
-    if (empty($nome_progetto) || empty($importo) || $importo <= 0) {
-        echo "<script>alert('Errore: Importo non valido o dati mancanti.'); window.history.back();</script>";
-        exit();
+// CSS basic
+echo "<style>
+    body {
+        font-family: Arial, sans-serif;
+        padding: 30px;
+        background-color: #f5f5f5;
     }
+    h2, h3 {
+        color: #333;
+    }
+    form {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        max-width: 500px;
+    }
+    input[type='text'], input[type='number'], input[type='email'], select, textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0 16px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    input[type='submit'] {
+        background-color: #28a745;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    input[type='submit']:hover {
+        background-color: #218838;
+    }
+    .msg {
+        padding: 10px;
+        margin: 15px 0;
+        border-radius: 5px;
+    }
+    .success {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    .error {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+</style>";
 
-    // Chiamata alla procedura memorizzata
-    $stmt = $conn->prepare("CALL FinanziaProgetto(?, ?, ?, ?, ?)");
-    $stmt->bind_param("ssdsd", $email_utente, $nome_progetto, $importo, $data, $codice_reward);
+// Verifica se l'utente ha già finanziato il progetto
+$ha_gia_finanziato = false;
+$check = $conn->prepare("SELECT * FROM Finanziamento WHERE email_Utente = ? AND nome_Progetto = ?");
+$check->bind_param("ss", $email_utente, $nome_progetto);
+$check->execute();
+$result_check = $check->get_result();
+if ($result_check->num_rows > 0) {
+    $ha_gia_finanziato = true;
+}
+$check->close();
+
+// Selezione reward dopo finanziamento
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['scegli_reward'])) {
+    $codice_reward = $_POST['codice_reward'];
+
+    $stmt = $conn->prepare("CALL SelezionaReward(?, ?, ?)");
+    $stmt->bind_param("ssi", $email_utente, $nome_progetto, $codice_reward);
 
     if ($stmt->execute()) {
-        echo "<script>
-                alert('Finanziamento completato con successo!');
-                window.location.href = 'visualizza_Progetti.php';
-              </script>";
-        exit();
+        echo "<div class='msg success'>Reward selezionata con successo!</div>";
     } else {
-        echo "<script>alert('Errore durante il finanziamento: " . addslashes($stmt->error) . "');</script>";
+        echo "<div class='msg error'>Errore nella selezione della reward: " . $stmt->error . "</div>";
     }
 
     $stmt->close();
-    $conn->close();
+}
+
+// Finanziamento del progetto
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['finanzia'])) {
+    $importo = $_POST['importo'];
+    $data = date("Y-m-d");
+
+    $stmt = $conn->prepare("INSERT INTO Finanziamento (email_Utente, nome_Progetto, importo, data) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("ssds", $email_utente, $nome_progetto, $importo, $data);
+
+    if ($stmt->execute()) {
+        echo "<div class='msg success'>Finanziamento registrato con successo!</div>";
+        $ha_gia_finanziato = true;
+    } else {
+        echo "<div class='msg error'>Errore nel finanziamento: " . $stmt->error . "</div>";
+    }
+
+    $stmt->close();
+}
+
+// Mostra form di selezione reward se ha già finanziato
+if ($ha_gia_finanziato) {
+    $query = $conn->prepare("SELECT codice, descrizione FROM Reward WHERE nome_Progetto = ?");
+    $query->bind_param("s", $nome_progetto);
+    $query->execute();
+    $result = $query->get_result();
+
+    echo "<h3>Seleziona una reward disponibile per questo progetto:</h3>";
+    echo "<form method='post'>";
+    echo "<label>Reward:</label>";
+    echo "<select name='codice_reward' required>";
+    while ($row = $result->fetch_assoc()) {
+        echo "<option value='" . $row['codice'] . "'>" . htmlspecialchars($row['descrizione']) . "</option>";
+    }
+    echo "</select>";
+    echo "<input type='submit' name='scegli_reward' value='Conferma Reward'>";
+    echo "</form>";
+
+    $query->close();
+} else {
+    // FORM per finanziare un progetto
+    echo "<h2>Finanzia il progetto: " . htmlspecialchars($nome_progetto) . "</h2>";
+    echo "<form method='post'>";
+    echo "<label>Importo (€):</label>";
+    echo "<input type='number' step='0.01' name='importo' required>";
+    echo "<input type='submit' name='finanzia' value='Finanzia Ora'>";
+    echo "</form>";
 }
 ?>
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Finanzia un Progetto</title>
-    <link rel="stylesheet" href="../../css/style.css">
-</head>
-<body>
-<form method="POST">
-    <input type="hidden" name="nome_progetto" value="<?php echo htmlspecialchars($nome_progetto ?? '', ENT_QUOTES, 'UTF-8'); ?>">
-    <p><strong>Progetto:</strong> <?php echo htmlspecialchars($nome_progetto ?? '', ENT_QUOTES, 'UTF-8'); ?></p>
-    <input type="number" step="0.01" name="importo" placeholder="Importo da finanziare (€)" required>
-    <input type="text" name="codice_reward" placeholder="Codice Reward (opzionale)">
-    <button type="submit">Finanzia Progetto</button>
-</form>
-
-</body>
-</html>
