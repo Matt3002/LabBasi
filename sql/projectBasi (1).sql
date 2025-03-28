@@ -191,22 +191,30 @@ CREATE PROCEDURE RegistrazioneUtente(
     IN p_luogo_nascita VARCHAR(50)
 )
 BEGIN
-    -- Controllo che la mail sia nel formato corretto usando LIKE con _ per caratteri arbitrari
+    -- Controllo che la mail sia nel formato corretto
     IF p_email NOT LIKE '_%@_%._%' THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Errore: Email non valida';
     END IF;
-    
-    -- Controllo che l'utente abbia almeno 18 anni (anno corrente fissato al 2025)
+
+    -- Controllo che l'utente abbia almeno 18 anni (anno corrente = 2025)
     IF (2025 - p_anno_nascita) < 18 THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Errore: Devi avere almeno 18 anni per registrarti';
     END IF;
-    
+
+    -- Controllo se l'utente è già registrato
+    IF EXISTS (SELECT 1 FROM Utente WHERE email = p_email) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Errore: Utente già registrato con questa email';
+    END IF;
+
+    -- Inserimento dell'utente
     INSERT INTO Utente (email, nickname, password, nome, cognome, anno_Nascita, luogo_Nascita)
     VALUES (p_email, p_nickname, p_password, p_nome, p_cognome, p_anno_nascita, p_luogo_nascita);
 END //
 DELIMITER ;
+
 
 -- Stored Procedure per autenticazione di un utente
 DELIMITER //
@@ -292,7 +300,6 @@ BEGIN
 END //
 DELIMITER ;
 
-
 -- Stored Procedure per finanziare un progetto con controllo sull'importo
 DELIMITER //
 CREATE PROCEDURE FinanziaProgetto(
@@ -303,7 +310,6 @@ CREATE PROCEDURE FinanziaProgetto(
     IN p_codice_Reward INT
 )
 BEGIN
-
     DECLARE v_budget FLOAT;
     DECLARE v_fondi_raccolti FLOAT;
     DECLARE v_nuovo_totale FLOAT;
@@ -314,12 +320,27 @@ BEGIN
         SET MESSAGE_TEXT = "Errore: L'importo deve essere positivo";
     END IF;
 
+    -- Verifica che non esista già un finanziamento dello stesso utente per lo stesso progetto nello stesso giorno
+    IF EXISTS (
+        SELECT 1
+        FROM Finanziamento
+        WHERE email_Utente = p_email_Utente
+          AND nome_Progetto = p_nome_Progetto
+          AND data = p_data
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Errore: Hai già finanziato questo progetto in questa data';
+    END IF;
+
     -- Recupera il budget del progetto
-    SELECT budget INTO v_budget FROM Progetto WHERE nome = p_nome_Progetto;
+    SELECT budget INTO v_budget
+    FROM Progetto
+    WHERE nome = p_nome_Progetto;
 
     -- Calcola il totale attuale dei finanziamenti ricevuti
     SELECT COALESCE(SUM(importo), 0) INTO v_fondi_raccolti
-    FROM Finanziamento WHERE nome_Progetto = p_nome_Progetto;
+    FROM Finanziamento
+    WHERE nome_Progetto = p_nome_Progetto;
 
     -- Verifica che il nuovo finanziamento non superi il budget
     SET v_nuovo_totale = v_fondi_raccolti + p_importo;
@@ -328,7 +349,7 @@ BEGIN
         SET MESSAGE_TEXT = 'Errore: Il finanziamento supererebbe il budget del progetto';
     END IF;
 
-    -- Verifica che la data sia valida
+    -- Verifica che la data sia valida (non oltre la data limite)
     IF p_data > (SELECT data_limite FROM Progetto WHERE nome = p_nome_Progetto) THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Errore: Non è possibile finanziare un progetto oltre la data limite';
@@ -390,10 +411,10 @@ BEGIN
     DECLARE v_skill_match INT;
     DECLARE v_profile_match INT;
 
-    -- Verifica che il profilo sia richiesto dal progetto per cui si sta inviando la candidatura
+    -- Verifica che il profilo sia richiesto dal progetto
     SELECT COUNT(*) INTO v_profile_match
     FROM Profilo_Software PS
-    WHERE PS.id_Profilo = p_id_Profilo AND PS.nome_Software=p_nome_Progetto;
+    WHERE PS.id_Profilo = p_id_Profilo AND PS.nome_Software = p_nome_Progetto;
 
     IF v_profile_match < 1 THEN
         SIGNAL SQLSTATE '45000'
@@ -405,19 +426,32 @@ BEGIN
     FROM ProfiloSkill PS
     JOIN Curriculum C ON PS.nome_competenza = C.nome_competenza
     WHERE PS.id_Profilo = p_id_Profilo
-    AND C.email_Utente = p_email_Utente
-    AND C.livello >= PS.livello;
+      AND C.email_Utente = p_email_Utente
+      AND C.livello >= PS.livello;
     
     IF v_skill_match < (SELECT COUNT(*) FROM ProfiloSkill WHERE id_profilo = p_id_Profilo) THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = "Errore: L'utente non soddisfa i requisiti di skill richiesti per il profilo";
     END IF;
-    
-    -- Inserisce la candidatura con l'email del creatore recuperata
+
+    -- Verifica che non esista già una candidatura per lo stesso utente, progetto e profilo
+    IF EXISTS (
+        SELECT 1
+        FROM Candidatura
+        WHERE email_Utente = p_email_Utente
+          AND id_Profilo = p_id_Profilo
+          AND nome_Progetto = p_nome_Progetto
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = "Errore: Hai già inviato una candidatura per questo profilo in questo progetto";
+    END IF;
+
+    -- Inserisce la candidatura
     INSERT INTO Candidatura (email_Utente, id_Profilo, stato, nome_Progetto)
     VALUES (p_email_Utente, p_id_Profilo, 'in attesa', p_nome_Progetto);
 END //
 DELIMITER ;
+
 
 DELIMITER //
 CREATE PROCEDURE AggiungiCompetenza(
@@ -425,16 +459,28 @@ CREATE PROCEDURE AggiungiCompetenza(
     IN p_email_Amministratore VARCHAR(50)
 )
 BEGIN
-    -- Verifica se l'utente è amministratore
-    IF EXISTS (SELECT 1 FROM Amministratore WHERE email_Utente = p_email_Amministratore) THEN
-        INSERT INTO Skill (competenza, email_Amministratore)
-        VALUES (p_competenza, p_email_Amministratore);
-    ELSE
+    -- Verifica se l'utente è un amministratore
+    IF NOT EXISTS (
+        SELECT 1 FROM Amministratore WHERE email_Utente = p_email_Amministratore
+    ) THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Errore: Solo un amministratore può aggiungere una competenza.';
     END IF;
+
+    -- Verifica se la competenza esiste già
+    IF EXISTS (
+        SELECT 1 FROM Skill WHERE competenza = p_competenza
+    ) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Errore: Questa competenza è già presente in piattaforma.';
+    END IF;
+
+    -- Inserisce la nuova competenza
+    INSERT INTO Skill (competenza, email_Amministratore)
+    VALUES (p_competenza, p_email_Amministratore);
 END //
 DELIMITER ;
+
 
 -- Stored Procedure per autenticazione amministratore con codice di sicurezza
 DELIMITER //
@@ -466,15 +512,26 @@ CREATE PROCEDURE InserisciProgetto(
     IN p_email_creatore VARCHAR(255)
 )
 BEGIN
+    -- Verifica che l'utente sia un creatore
     IF EXISTS (SELECT 1 FROM Creatore WHERE email_Utente = p_email_creatore) THEN
+
+        -- Verifica che non esista già un progetto con lo stesso nome
+        IF EXISTS (SELECT 1 FROM Progetto WHERE nome = p_nome) THEN
+            SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'Errore: Esiste già un progetto con questo nome.';
+        END IF;
+
+        -- Inserimento del progetto
         INSERT INTO Progetto (nome, descrizione, data_Inserimento, budget, data_Limite, stato, tipo, email_Creatore)
         VALUES (p_nome, p_descrizione, p_data_inserimento, p_budget, p_data_limite, p_stato, p_tipo, p_email_creatore);
+
     ELSE
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Errore: Solo un creatore può inserire un progetto.';
     END IF;
 END //
 DELIMITER ;
+
 
 -- Stored Procedure per inserire una reward per un progetto
 DELIMITER //
@@ -752,10 +809,40 @@ INSERT INTO Progetto (nome, descrizione, data_Inserimento, budget, data_Limite, 
 ('VR Therapy', 'Applicazione di realtà virtuale per terapia psicologica', '2025-02-18', 22000.00, '2025-10-05', 'aperto', 'software', 'giovanni.verdi@email.com'),
 ('E-Payment Blockchain', 'Sistema di pagamento digitale basato su blockchain', '2025-03-12', 25000.00, '2025-12-01', 'aperto', 'software', 'anna.neri@email.com');
 
--- Inserimento dati nella tabella Reward
+-- Inserimento ricompense aggiuntive per i progetti
 INSERT INTO Reward (descrizione, foto, nome_Progetto) VALUES
-('Maglietta ufficiale del progetto', 'maglietta.png', 'Smartwatch AI'),
-('Accesso anticipato al software', 'accesso.png', 'E-commerce Sicuro');
+-- Smartwatch AI
+('Adesivi edizione limitata', 'adesivi.png', 'Smartwatch AI'),
+('Poster autografato dai designer', 'poster.png', 'Smartwatch AI'),
+
+-- E-commerce Sicuro
+('Sconto del 50% sul primo acquisto', 'sconto50.png', 'E-commerce Sicuro'),
+('Accesso a webinar esclusivo', 'webinar.png', 'E-commerce Sicuro'),
+
+-- App Fitness AI
+('Abbonamento Premium per 3 mesi', 'premium3.png', 'App Fitness AI'),
+('Maglietta con logo Fitness AI', 'tshirt_fitness.png', 'App Fitness AI'),
+
+-- CyberShield
+('Penna USB con software di sicurezza', 'usb.png', 'CyberShield'),
+('Sessione gratuita con esperto cybersecurity', 'sessione.png', 'CyberShield'),
+
+-- SmartHome Hub
+('Sticker personalizzati per i dispositivi smart', 'sticker_hub.png', 'SmartHome Hub'),
+('Accesso anticipato all’app mobile', 'app_preview.png', 'SmartHome Hub'),
+
+-- Social Learning Platform
+('Profilo verificato nella piattaforma', 'badge_verificato.png', 'Social Learning Platform'),
+('Invito al gruppo beta tester', 'beta_group.png', 'Social Learning Platform'),
+
+-- VR Therapy
+('Visore VR brandizzato', 'visore.png', 'VR Therapy'),
+('Sessione gratuita di prova con terapeuta virtuale', 'sessione_vr.png', 'VR Therapy'),
+
+-- E-Payment Blockchain
+('NFT collezionabile del progetto', 'nft.png', 'E-Payment Blockchain'),
+('Accesso esclusivo alla roadmap tecnica', 'roadmap.png', 'E-Payment Blockchain');
+
 
 -- Inserimento dati nella tabella Finanziamento
 INSERT INTO Finanziamento (email_Utente, nome_Progetto, importo, data, codice_Reward) VALUES
@@ -872,6 +959,24 @@ VALUES
   ('Batteria Li-ion 18650', 'Batteria ricaricabile 3.7V 2600mAh', 7.00);
 
 
+INSERT INTO Candidatura (email_Utente, id_Profilo, stato, nome_Progetto) VALUES
+-- Paolo Gialli → Backend per E-commerce Sicuro
+('paolo.gialli@email.com', 2, 'in attesa', 'E-commerce Sicuro'),
+
+-- Lucia Bianchi → UI/UX Designer per Social Learning Platform
+('lucia.bianchi@email.com', 3, 'in attesa', 'Social Learning Platform'),
+
+-- Mario Rossi → DevOps Specialist per App Fitness AI
+('mario.rossi@email.com', 8, 'in attesa', 'App Fitness AI'),
+
+-- Giovanni Verdi → Esperto AI per VR Therapy
+('giovanni.verdi@email.com', 1, 'in attesa', 'VR Therapy'),
+
+-- Lucia Bianchi → Blockchain Developer per E-Payment Blockchain
+('lucia.bianchi@email.com', 10, 'in attesa', 'E-Payment Blockchain'),
+
+-- Paolo Gialli → UI/UX Designer per App Fitness AI
+('paolo.gialli@email.com', 3, 'in attesa', 'App Fitness AI');
 
 
 
