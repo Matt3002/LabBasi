@@ -42,10 +42,10 @@ echo "<a href='logout.php'>Logout</a>";*/
         <a href="../finanzia_Progetto.php" onclick="toggleMenu()">Finanzia un Progetto</a>
         <div class="divider"></div>
         <a href="../inserisci_Progetto.php" onclick="toggleMenu()">Inserisci Progetto</a>
-        <a href="#" onclick="toggleMenu()">Inserisci Reward</a>
+        <a href="../inserisci_reward.php" onclick="toggleMenu()">Inserisci Reward</a>
         <a href="../miei_Progetti.php" onclick="toggleMenu()">I tuoi progetti</a>
         <a href="#" onclick="toggleMenu()">Inserisci Profilo</a>
-        <a href="#" onclick="toggleMenu()">Gestione Candidature</a>
+        <a href="../seleziona_componenti.php" onclick="toggleMenu()">Seleziona Componenti</a>
     </div>
 
     <section class="content">

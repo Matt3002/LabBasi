@@ -179,167 +179,6 @@ CREATE TABLE Candidatura (
 engine= "InnoDB";
 
 
--- Inserimento dati nella tabella Utente
-INSERT INTO Utente (email, nickname, password, nome, cognome, anno_Nascita, luogo_Nascita) VALUES
-('mario.rossi@email.com', 'MarioR', 'pass123', 'Mario', 'Rossi', 1995, 'Roma'),
-('lucia.bianchi@email.com', 'LuciaB', 'securepass', 'Lucia', 'Bianchi', 1998, 'Milano'),
-('giovanni.verdi@email.com', 'GioV', 'mypassword', 'Giovanni', 'Verdi', 1992, 'Napoli'),
-('anna.neri@email.com', 'AnnaN', 'passanna', 'Anna', 'Neri', 2000, 'Torino'),
-('paolo.gialli@email.com', 'PaoloG', 'paopass', 'Paolo', 'Gialli', 1993, 'Bologna');
-
--- Inserimento dati nella tabella Amministratore
-INSERT INTO Amministratore (email_Utente, codice_Sicurezza) VALUES
-('mario.rossi@email.com', 'admin123'),
-('lucia.bianchi@email.com', 'secure456');
-
--- Inserimento dati nella tabella Skill
-INSERT INTO Skill (competenza, email_Amministratore) VALUES
-('Python', 'mario.rossi@email.com'),
-('Java', 'lucia.bianchi@email.com'),
-('HTML', 'mario.rossi@email.com'),
-('AI', 'lucia.bianchi@email.com'),
-('Machine Learning', 'lucia.bianchi@email.com'),
-('PHP', 'mario.rossi@email.com'),
-('ReactJS', 'lucia.bianchi@email.com'),
-('Cybersecurity', 'lucia.bianchi@email.com'),
-('Big Data', 'lucia.bianchi@email.com'),
-('UX Design', 'lucia.bianchi@email.com'),
-('Networking', 'lucia.bianchi@email.com'),
-('Blockchain', 'lucia.bianchi@email.com');
-
--- Inserimento dati nella tabella Curriculum
-INSERT INTO Curriculum (email_Utente, nome_Competenza, livello) VALUES
-('giovanni.verdi@email.com', 'Python', 4),
-('anna.neri@email.com', 'Java', 3),
-('paolo.gialli@email.com', 'HTML', 5),
-('mario.rossi@email.com', 'AI', 2);
-
--- Inserimento dati nella tabella Creatore
-INSERT INTO Creatore (email_Utente, nr_progetti, affidabilita) VALUES
-('giovanni.verdi@email.com', 2, 80.00),
-('anna.neri@email.com', 3, 90.00);
-
--- Inserimento dati nella tabella Progetto
-INSERT INTO Progetto (nome, descrizione, data_Inserimento, budget, data_Limite, stato, tipo, email_Creatore) VALUES
-('Smartwatch AI', 'Un nuovo smartwatch con AI integrata', '2025-02-01', 10000.00, '2025-06-01', 'aperto', 'hardware', 'giovanni.verdi@email.com'),
-('E-commerce Sicuro', 'Piattaforma di e-commerce con AI', '2025-01-10', 15000.00, '2025-05-15', 'aperto', 'software', 'anna.neri@email.com'),
-('App Fitness AI', 'Applicazione mobile per il fitness con AI personalizzata', '2025-03-05', 12000.00, '2025-07-10', 'aperto', 'software', 'giovanni.verdi@email.com'),
-('CyberShield', 'Sistema avanzato di protezione per reti aziendali', '2025-02-20', 20000.00, '2025-09-01', 'aperto', 'hardware', 'anna.neri@email.com'),
-('SmartHome Hub', 'Dispositivo IoT per la gestione della casa intelligente', '2025-04-15', 8000.00, '2025-08-20', 'aperto', 'hardware', 'giovanni.verdi@email.com'),
-('Social Learning Platform', 'Piattaforma social per l apprendimento collaborativo', '2025-01-25', 18000.00, '2025-06-30', 'aperto', 'software', 'anna.neri@email.com'),
-('VR Therapy', 'Applicazione di realtà virtuale per terapia psicologica', '2025-02-18', 22000.00, '2025-10-05', 'aperto', 'software', 'giovanni.verdi@email.com'),
-('E-Payment Blockchain', 'Sistema di pagamento digitale basato su blockchain', '2025-03-12', 25000.00, '2025-12-01', 'aperto', 'software', 'anna.neri@email.com');
-
--- Inserimento dati nella tabella Reward
-INSERT INTO Reward (descrizione, foto, nome_Progetto) VALUES
-('Maglietta ufficiale del progetto', 'maglietta.png', 'Smartwatch AI'),
-('Accesso anticipato al software', 'accesso.png', 'E-commerce Sicuro');
-
--- Inserimento dati nella tabella Finanziamento
-INSERT INTO Finanziamento (email_Utente, nome_Progetto, importo, data, codice_Reward) VALUES
-('paolo.gialli@email.com', 'Smartwatch AI', 500.00, '2025-02-05', 1),
-('mario.rossi@email.com', 'E-commerce Sicuro', 1000.00, '2025-02-07', 2);
-
--- Inserimento dati nella tabella Commento
-INSERT INTO Commento (email_Utente, nome_Progetto, data, testo) VALUES
-('paolo.gialli@email.com', 'Smartwatch AI', '2025-02-10', 'Idea interessante!'),
-('lucia.bianchi@email.com', 'E-commerce Sicuro', '2025-02-12', 'Sembra promettente!');
-
-
-INSERT INTO Profilo (nome) VALUES 
-('Esperto AI'),
-('Sviluppatore Backend'),
-('UI/UX Designer'),
-('Cybersecurity Analyst'),
-('Data Scientist'),
-('Full Stack Developer'),
-('Cloud Engineer'),
-('Cybersecurity Expert'),
-('Data Engineer'),
-('AI Researcher'),
-('DevOps Specialist'),
-('Frontend Developer'),
-('Backend Developer'),
-('Network Administrator'),
-('Blockchain Developer');
-
-INSERT INTO Profilo_Software (nome_Software, id_Profilo) VALUES
--- Progetto: E-commerce Sicuro
-('E-commerce Sicuro', 2),  -- Sviluppatore Backend
-('E-commerce Sicuro', 3),  -- UI/UX Designer
-('E-commerce Sicuro', 7),  -- Frontend Developer
-
--- Progetto: App Fitness AI
-('App Fitness AI', 1),  -- Esperto AI
-('App Fitness AI', 6),  -- DevOps Specialist
-('App Fitness AI', 8),  -- Backend Developer
-
--- Progetto: Social Learning Platform
-('Social Learning Platform', 3),  -- UI/UX Designer
-('Social Learning Platform', 7),  -- Frontend Developer
-('Social Learning Platform', 8),  -- Backend Developer
-
--- Progetto: VR Therapy
-('VR Therapy', 1),  -- Esperto AI
-('VR Therapy', 4),  -- Cybersecurity Analyst
-('VR Therapy', 10), -- Blockchain Developer
-
--- Progetto: E-Payment Blockchain
-('E-Payment Blockchain', 10), -- Blockchain Developer
-('E-Payment Blockchain', 2),  -- Sviluppatore Backend
-('E-Payment Blockchain', 9);  -- Network Administrator
- 
-
-INSERT INTO ProfiloSkill (id_Profilo, nome_Competenza, livello) VALUES
--- Esperto AI
-(1, 'AI', 5),
-(1, 'Machine Learning', 5),
-(1, 'Big Data', 4),
-
--- Sviluppatore Backend
-(2, 'Java', 5),
-(2, 'PHP', 4),
-
-
--- UI/UX Designer
-(3, 'HTML', 5),
-(3, 'ReactJS', 4),
-(3, 'UX Design', 5),
-
--- Cybersecurity Analyst
-(4, 'Cybersecurity', 5),
-(4, 'Networking', 4),
-
--- Data Scientist
-(5, 'Python', 5),
-(5, 'Machine Learning', 4),
-(5, 'Big Data', 5),
-
--- Full Stack Developer
-(6, 'Java', 5),
-(6, 'PHP', 5),
-(6, 'ReactJS', 4),
-(6, 'HTML', 5),
-
--- Cloud Engineer
-(7, 'Networking', 4),
-(7, 'Cybersecurity', 3),
-(7, 'Big Data', 4),
-
--- DevOps Specialist
-(8, 'Networking', 5),
-(8, 'Python', 4),
-(8, 'AI', 3),
-
--- Blockchain Developer
-(9, 'Blockchain', 5),
-(9, 'Cybersecurity', 4),
-(9, 'Networking', 3);
-  
-
-
-
-
 -- Stored Procedure per registrare un nuovo utente con controlli
 DELIMITER //
 CREATE PROCEDURE RegistrazioneUtente(
@@ -836,9 +675,9 @@ BEGIN
     WHERE email_Utente = NEW.email_Creatore;
 END //
 DELIMITER ;
+
 -- Trigger per garantire che quantita della tabella componente sia >0
 DELIMITER $$
-
 CREATE TRIGGER check_quantita_componente
 BEFORE INSERT ON Lista_Componenti
 FOR EACH ROW
@@ -861,6 +700,181 @@ BEGIN
     WHERE data_limite < CURDATE() AND stato = 'aperto';
 END //
 DELIMITER ;
+
+-- Inserimento dati nella tabella Utente
+INSERT INTO Utente (email, nickname, password, nome, cognome, anno_Nascita, luogo_Nascita) VALUES
+('mario.rossi@email.com', 'MarioR', 'pass123', 'Mario', 'Rossi', 1995, 'Roma'),
+('lucia.bianchi@email.com', 'LuciaB', 'securepass', 'Lucia', 'Bianchi', 1998, 'Milano'),
+('giovanni.verdi@email.com', 'GioV', 'mypassword', 'Giovanni', 'Verdi', 1992, 'Napoli'),
+('anna.neri@email.com', 'AnnaN', 'passanna', 'Anna', 'Neri', 2000, 'Torino'),
+('paolo.gialli@email.com', 'PaoloG', 'paopass', 'Paolo', 'Gialli', 1993, 'Bologna');
+
+-- Inserimento dati nella tabella Amministratore
+INSERT INTO Amministratore (email_Utente, codice_Sicurezza) VALUES
+('mario.rossi@email.com', 'admin123'),
+('lucia.bianchi@email.com', 'secure456');
+
+-- Inserimento dati nella tabella Skill
+INSERT INTO Skill (competenza, email_Amministratore) VALUES
+('Python', 'mario.rossi@email.com'),
+('Java', 'lucia.bianchi@email.com'),
+('HTML', 'mario.rossi@email.com'),
+('AI', 'lucia.bianchi@email.com'),
+('Machine Learning', 'lucia.bianchi@email.com'),
+('PHP', 'mario.rossi@email.com'),
+('ReactJS', 'lucia.bianchi@email.com'),
+('Cybersecurity', 'lucia.bianchi@email.com'),
+('Big Data', 'lucia.bianchi@email.com'),
+('UX Design', 'lucia.bianchi@email.com'),
+('Networking', 'lucia.bianchi@email.com'),
+('Blockchain', 'lucia.bianchi@email.com');
+
+-- Inserimento dati nella tabella Curriculum
+INSERT INTO Curriculum (email_Utente, nome_Competenza, livello) VALUES
+('giovanni.verdi@email.com', 'Python', 4),
+('anna.neri@email.com', 'Java', 3),
+('paolo.gialli@email.com', 'HTML', 5),
+('mario.rossi@email.com', 'AI', 2);
+
+-- Inserimento dati nella tabella Creatore
+INSERT INTO Creatore (email_Utente, nr_progetti, affidabilita) VALUES
+('giovanni.verdi@email.com', 0, 0.00),
+('anna.neri@email.com', 0, 0.00);
+
+-- Inserimento dati nella tabella Progetto
+INSERT INTO Progetto (nome, descrizione, data_Inserimento, budget, data_Limite, stato, tipo, email_Creatore) VALUES
+('Smartwatch AI', 'Un nuovo smartwatch con AI integrata', '2025-02-01', 10000.00, '2025-06-01', 'aperto', 'hardware', 'giovanni.verdi@email.com'),
+('E-commerce Sicuro', 'Piattaforma di e-commerce con AI', '2025-01-10', 15000.00, '2025-05-15', 'aperto', 'software', 'anna.neri@email.com'),
+('App Fitness AI', 'Applicazione mobile per il fitness con AI personalizzata', '2025-03-05', 12000.00, '2025-07-10', 'aperto', 'software', 'giovanni.verdi@email.com'),
+('CyberShield', 'Sistema avanzato di protezione per reti aziendali', '2025-02-20', 20000.00, '2025-09-01', 'aperto', 'hardware', 'anna.neri@email.com'),
+('SmartHome Hub', 'Dispositivo IoT per la gestione della casa intelligente', '2025-04-15', 8000.00, '2025-08-20', 'aperto', 'hardware', 'giovanni.verdi@email.com'),
+('Social Learning Platform', 'Piattaforma social per l apprendimento collaborativo', '2025-01-25', 18000.00, '2025-06-30', 'aperto', 'software', 'anna.neri@email.com'),
+('VR Therapy', 'Applicazione di realtà virtuale per terapia psicologica', '2025-02-18', 22000.00, '2025-10-05', 'aperto', 'software', 'giovanni.verdi@email.com'),
+('E-Payment Blockchain', 'Sistema di pagamento digitale basato su blockchain', '2025-03-12', 25000.00, '2025-12-01', 'aperto', 'software', 'anna.neri@email.com');
+
+-- Inserimento dati nella tabella Reward
+INSERT INTO Reward (descrizione, foto, nome_Progetto) VALUES
+('Maglietta ufficiale del progetto', 'maglietta.png', 'Smartwatch AI'),
+('Accesso anticipato al software', 'accesso.png', 'E-commerce Sicuro');
+
+-- Inserimento dati nella tabella Finanziamento
+INSERT INTO Finanziamento (email_Utente, nome_Progetto, importo, data, codice_Reward) VALUES
+('paolo.gialli@email.com', 'Smartwatch AI', 500.00, '2025-02-05', 1),
+('mario.rossi@email.com', 'E-commerce Sicuro', 1000.00, '2025-02-07', 2);
+
+-- Inserimento dati nella tabella Commento
+INSERT INTO Commento (email_Utente, nome_Progetto, data, testo) VALUES
+('paolo.gialli@email.com', 'Smartwatch AI', '2025-02-10', 'Idea interessante!'),
+('lucia.bianchi@email.com', 'E-commerce Sicuro', '2025-02-12', 'Sembra promettente!');
+
+
+INSERT INTO Profilo (nome) VALUES 
+('Esperto AI'),
+('Sviluppatore Backend'),
+('UI/UX Designer'),
+('Cybersecurity Analyst'),
+('Data Scientist'),
+('Full Stack Developer'),
+('Cloud Engineer'),
+('Cybersecurity Expert'),
+('Data Engineer'),
+('AI Researcher'),
+('DevOps Specialist'),
+('Frontend Developer'),
+('Backend Developer'),
+('Network Administrator'),
+('Blockchain Developer');
+
+INSERT INTO Profilo_Software (nome_Software, id_Profilo) VALUES
+-- Progetto: E-commerce Sicuro
+('E-commerce Sicuro', 2),  -- Sviluppatore Backend
+('E-commerce Sicuro', 3),  -- UI/UX Designer
+('E-commerce Sicuro', 7),  -- Frontend Developer
+
+-- Progetto: App Fitness AI
+('App Fitness AI', 1),  -- Esperto AI
+('App Fitness AI', 6),  -- DevOps Specialist
+('App Fitness AI', 8),  -- Backend Developer
+
+-- Progetto: Social Learning Platform
+('Social Learning Platform', 3),  -- UI/UX Designer
+('Social Learning Platform', 7),  -- Frontend Developer
+('Social Learning Platform', 8),  -- Backend Developer
+
+-- Progetto: VR Therapy
+('VR Therapy', 1),  -- Esperto AI
+('VR Therapy', 4),  -- Cybersecurity Analyst
+('VR Therapy', 10), -- Blockchain Developer
+
+-- Progetto: E-Payment Blockchain
+('E-Payment Blockchain', 10), -- Blockchain Developer
+('E-Payment Blockchain', 2),  -- Sviluppatore Backend
+('E-Payment Blockchain', 9);  -- Network Administrator
+ 
+
+INSERT INTO ProfiloSkill (id_Profilo, nome_Competenza, livello) VALUES
+-- Esperto AI
+(1, 'AI', 5),
+(1, 'Machine Learning', 5),
+(1, 'Big Data', 4),
+
+-- Sviluppatore Backend
+(2, 'Java', 5),
+(2, 'PHP', 4),
+
+
+-- UI/UX Designer
+(3, 'HTML', 5),
+(3, 'ReactJS', 4),
+(3, 'UX Design', 5),
+
+-- Cybersecurity Analyst
+(4, 'Cybersecurity', 5),
+(4, 'Networking', 4),
+
+-- Data Scientist
+(5, 'Python', 5),
+(5, 'Machine Learning', 4),
+(5, 'Big Data', 5),
+
+-- Full Stack Developer
+(6, 'Java', 5),
+(6, 'PHP', 5),
+(6, 'ReactJS', 4),
+(6, 'HTML', 5),
+
+-- Cloud Engineer
+(7, 'Networking', 4),
+(7, 'Cybersecurity', 3),
+(7, 'Big Data', 4),
+
+-- DevOps Specialist
+(8, 'Networking', 5),
+(8, 'Python', 4),
+(8, 'AI', 3),
+
+-- Blockchain Developer
+(9, 'Blockchain', 5),
+(9, 'Cybersecurity', 4),
+(9, 'Networking', 3);
+  
+INSERT INTO Componente (nome, descrizione, prezzo)
+VALUES 
+  ('Raspberry Pi 4', 'Microcomputer con 4GB RAM, USB-C, HDMI', 59.99),
+  ('Arduino UNO', 'Scheda microcontrollore basata su ATmega328P', 24.50),
+  ('Modulo WiFi ESP8266', 'Modulo wireless per connessione WiFi', 5.00),
+  ('Sensore DHT11', 'Sensore di temperatura e umidità', 2.80),
+  ('Modulo Relè 5V', 'Modulo a relè per controllare dispositivi ad alto voltaggio', 3.20),
+  ('Display OLED 0.96"', 'Display grafico 128x64 pixel I2C', 6.75),
+  ('Breadboard', 'Scheda per prototipazione rapida senza saldature', 4.00),
+  ('Cavi Jumper M-M', 'Set di 40 cavi per collegamenti su breadboard', 2.00),
+  ('Modulo GPS NEO-6M', 'Ricevitore GPS per progetti embedded', 12.90),
+  ('Batteria Li-ion 18650', 'Batteria ricaricabile 3.7V 2600mAh', 7.00);
+
+
+
+
+
 
 
 
