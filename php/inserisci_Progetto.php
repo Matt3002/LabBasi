@@ -7,37 +7,42 @@ $dataInserimento = date('Y-m-d'); // Data odierna
 $esito = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && $emailSession) {
-    $conn = new mysqli($host, $username, $password, $dbname);
-    if ($conn->connect_error) {
-        die("Connessione fallita: " . $conn->connect_error);
-    }
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-    // Verifica se il nome del progetto esiste già
-    $stmt = $conn->prepare("SELECT 1 FROM Progetto WHERE nome = ?");
-    $stmt->bind_param("s", $_POST["nome"]);
-    $stmt->execute();
-    $stmt->store_result();
+    try {
+        $conn = new mysqli($host, $username, $password, $dbname);
 
-    if ($stmt->num_rows > 0) {
-        $esito = "<p class='error'>Errore: Il nome del progetto è già in uso. Scegli un altro nome.</p>";
-    } else {
-        // Normalizza input
-        $_POST["stato"] = strtolower(trim($_POST["stato"]));
-        $_POST["tipo"] = strtolower(trim($_POST["tipo"]));
+        // Verifica se il nome del progetto esiste già
+        $stmt = $conn->prepare("SELECT 1 FROM Progetto WHERE nome = ?");
+        $stmt->bind_param("s", $_POST["nome"]);
+        $stmt->execute();
+        $stmt->store_result();
 
-        // Richiama la stored procedure
-        $stmt = $conn->prepare("CALL InserisciProgetto(?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssdssss", $_POST["nome"], $_POST["descrizione"], $dataInserimento, $_POST["budget"], $_POST["data_limite"], $_POST["stato"], $_POST["tipo"], $emailSession);
-
-        if ($stmt->execute()) {
-            $esito = "<p class='success'>Progetto inserito con successo!</p>";
+        if ($stmt->num_rows > 0) {
+            $esito = "<p class='error'>Errore: Il nome del progetto è già in uso. Scegli un altro nome.</p>";
         } else {
-            $esito = "<p class='error'>Errore: " . $stmt->error . "</p>";
+            // Normalizza input
+            $_POST["stato"] = strtolower(trim($_POST["stato"]));
+            $_POST["tipo"] = strtolower(trim($_POST["tipo"]));
+
+            $stmt->close();
+
+            // Richiama la stored procedure
+            $stmt = $conn->prepare("CALL InserisciProgetto(?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssdssss", $_POST["nome"], $_POST["descrizione"], $dataInserimento, $_POST["budget"], $_POST["data_limite"], $_POST["stato"], $_POST["tipo"], $emailSession);
+            $stmt->execute();
+            $esito = "<p class='success'>Progetto inserito con successo!</p>";
+        }
+
+        $stmt->close();
+        $conn->close();
+    } catch (mysqli_sql_exception $e) {
+        if (preg_match("/Errore: (.+)$/", $e->getMessage(), $matches)) {
+            $esito = "<p class='error'>" . htmlspecialchars($matches[1]) . "</p>";
+        } else {
+            $esito = "<p class='error'>Errore durante l'inserimento del progetto.</p>";
         }
     }
-
-    $stmt->close();
-    $conn->close();
 }
 ?>
 
