@@ -32,6 +32,7 @@ if (empty($id_profilo) || empty($nome_progetto)) {
 }
 
 // Chiamata alla procedura memorizzata
+
 $stmt = $conn->prepare("CALL InviaCandidatura(?, ?, ?)");
 $stmt->bind_param("sis", $email_utente, $id_profilo, $nome_progetto);
 
