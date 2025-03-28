@@ -19,14 +19,18 @@ $nome_progetto = $_GET['nome_progetto'];
 
 $stmt = $conn->prepare("
     SELECT 
-        P.nome AS nome_profilo, 
-        GROUP_CONCAT(CONCAT(PK.nome_Competenza, ' di livello ', PK.livello) ORDER BY PK.nome_Competenza ASC SEPARATOR '; ') AS competenze
+    P.id AS id_profilo,
+    P.nome AS nome_profilo, 
+    GROUP_CONCAT(CONCAT(PK.nome_competenza, ' di livello ', PK.livello) 
+                 ORDER BY PK.nome_competenza ASC 
+                 SEPARATOR '; ') AS competenze
     FROM Profilo P
-    JOIN Profilo_Software PS ON P.id = PS.id_Profilo
-    LEFT JOIN ProfiloSkill PK ON P.id = PK.id_Profilo
+    JOIN Profilo_Software PS ON P.id = PS.id_profilo
+    LEFT JOIN ProfiloSkill PK ON P.id = PK.id_profilo
     WHERE PS.nome_Software = ?
-    GROUP BY P.nome;
-");
+    GROUP BY P.id, P.nome;"
+    );
+
 
 $stmt->bind_param("s", $nome_progetto);
 $stmt->execute();
