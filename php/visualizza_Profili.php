@@ -1,13 +1,15 @@
 <?php
-
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 session_start();
-include 'config.php'; // Connessione al database
-$conn = new mysqli($host, $username, $password, $dbname);
-if (!isset($_SESSION['user_email'])) {
+require 'config.php';
+
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+$emailSession = $_SESSION['user_email'] ?? null;
+if (!$emailSession) {
     die("Accesso negato. Devi effettuare il login.");
 }
 
@@ -16,33 +18,37 @@ if (!isset($_GET['nome_progetto'])) {
 }
 
 $nome_progetto = $_GET['nome_progetto'];
-
-$stmt = $conn->prepare("
-    SELECT 
-    P.id AS id_profilo,
-    P.nome AS nome_profilo, 
-    GROUP_CONCAT(CONCAT(PK.nome_competenza, ' di livello ', PK.livello) 
-                 ORDER BY PK.nome_competenza ASC 
-                 SEPARATOR '; ') AS competenze
-    FROM Profilo P
-    JOIN Profilo_Software PS ON P.id = PS.id_profilo
-    LEFT JOIN ProfiloSkill PK ON P.id = PK.id_profilo
-    WHERE PS.nome_Software = ?
-    GROUP BY P.id, P.nome;"
-    );
-
-
-$stmt->bind_param("s", $nome_progetto);
-$stmt->execute();
-$result = $stmt->get_result();
-
 $profili = [];
-while ($row = $result->fetch_assoc()) {
-    $profili[] = $row;
-}
 
-$stmt->close();
-$conn->close();
+try {
+    $conn = new mysqli($host, $username, $password, $dbname);
+    $stmt = $conn->prepare("
+        SELECT 
+            P.id AS id_profilo,
+            P.nome AS nome_profilo, 
+            GROUP_CONCAT(CONCAT(PK.nome_competenza, ' di livello ', PK.livello) 
+                         ORDER BY PK.nome_competenza ASC 
+                         SEPARATOR '; ') AS competenze
+        FROM Profilo P
+        JOIN Profilo_Software PS ON P.id = PS.id_profilo
+        LEFT JOIN ProfiloSkill PK ON P.id = PK.id_profilo
+        WHERE PS.nome_Software = ?
+        GROUP BY P.id, P.nome
+    ");
+    $stmt->bind_param("s", $nome_progetto);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    while ($row = $result->fetch_assoc()) {
+        $profili[] = $row;
+    }
+
+    $stmt->close();
+    $conn->close();
+
+} catch (mysqli_sql_exception $e) {
+    die("<p class='error'>Errore nel recupero dei profili: " . htmlspecialchars($e->getMessage()) . "</p>");
+}
 ?>
 
 <!DOCTYPE html>

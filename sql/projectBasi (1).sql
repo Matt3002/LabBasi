@@ -371,7 +371,9 @@ CREATE PROCEDURE SelezionaReward(
 BEGIN
     UPDATE Finanziamento
     SET codice_Reward = p_codice_Reward
-    WHERE email_Utente = p_email_Utente AND nome_Progetto = p_nome_Progetto;
+    WHERE email_Utente = p_email_Utente
+      AND nome_Progetto = p_nome_Progetto
+      AND data = CURDATE();
 END //
 DELIMITER ;
 

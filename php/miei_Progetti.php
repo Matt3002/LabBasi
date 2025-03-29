@@ -8,17 +8,22 @@ if (!$emailSession) {
     die("<p class='error'>Errore: Devi essere loggato per vedere i tuoi progetti.</p>");
 }
 
-$conn = new mysqli($host, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connessione fallita: " . $conn->connect_error);
-}
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-$stmt = $conn->prepare("CALL VisualizzaProgettiCreati(?)");
-$stmt->bind_param("s", $emailSession);
-$stmt->execute();
-$result = $stmt->get_result();
-$stmt->close();
-$conn->close();
+try {
+    $conn = new mysqli($host, $username, $password, $dbname);
+
+    $stmt = $conn->prepare("CALL VisualizzaProgettiCreati(?)");
+    $stmt->bind_param("s", $emailSession);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    $conn->close();
+
+} catch (mysqli_sql_exception $e) {
+    echo "<p class='error'>Errore durante il recupero dei progetti: " . htmlspecialchars($e->getMessage()) . "</p>";
+    exit;
+}
 ?>
 
 <!DOCTYPE html>

@@ -2,55 +2,59 @@
 session_start();
 require 'config.php';
 
-$emailSession = isset($_SESSION['user_email']) ? $_SESSION['user_email'] : null;
+$emailSession = $_SESSION['user_email'] ?? null;
 $skillOptions = '';
 $hasAvailableSkills = false;
 $esito = '';
 
 if ($emailSession) {
-    $conn = new mysqli($host, $username, $password, $dbname);
-    if ($conn->connect_error) {
-        die("Connessione fallita: " . $conn->connect_error);
-    }
+    try {
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+        $conn = new mysqli($host, $username, $password, $dbname);
 
-    // Recupero delle skill disponibili
-    $stmt = $conn->prepare("CALL VisualizzaSkillDisponibili(?)");
-    $stmt->bind_param("s", $emailSession);
-    $stmt->execute();
-    $result = $stmt->get_result();
+        // Recupero delle skill disponibili
+        $stmt = $conn->prepare("CALL VisualizzaSkillDisponibili(?)");
+        $stmt->bind_param("s", $emailSession);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
-    if ($result->num_rows === 0) {
-        $skillOptions = "<option disabled>Tutte le skill sono già state aggiunte</option>";
-    } else {
-        $hasAvailableSkills = true;
-        while ($row = $result->fetch_assoc()) {
-            $competenza = htmlspecialchars($row['competenza']);
-            $skillOptions .= "<option value='{$competenza}'>{$competenza}</option>";
-        }
-    }
-
-    $stmt->close();
-
-    // Gestione form submit
-    if (isset($_POST['submit']) && $hasAvailableSkills) {
-        $competenza = $_POST['competenza'];
-        $livello = $_POST['livello'];
-
-        $stmt = $conn->prepare("CALL AggiungiSkillCurriculum(?, ?, ?)");
-        $stmt->bind_param("ssi", $emailSession, $competenza, $livello);
-
-        if ($stmt->execute()) {
-            // Refresh automatico della pagina per aggiornare la lista
-            header("Location:inserisci_Skill.php");
-            exit();
+        if ($result->num_rows === 0) {
+            $skillOptions = "<option disabled>Tutte le skill sono già state aggiunte</option>";
         } else {
-            $esito = "<p class='error'>Errore: la skill è già presente o il livello non è valido.</p>";
+            $hasAvailableSkills = true;
+            while ($row = $result->fetch_assoc()) {
+                $competenza = htmlspecialchars($row['competenza']);
+                $skillOptions .= "<option value='{$competenza}'>{$competenza}</option>";
+            }
         }
 
         $stmt->close();
-    }
 
-    $conn->close();
+        // Gestione form submit
+        if (isset($_POST['submit']) && $hasAvailableSkills) {
+            $competenza = $_POST['competenza'];
+            $livello = $_POST['livello'];
+
+            $stmt = $conn->prepare("CALL AggiungiSkillCurriculum(?, ?, ?)");
+            $stmt->bind_param("ssi", $emailSession, $competenza, $livello);
+
+            if ($stmt->execute()) {
+                header("Location: inserisci_Skill.php");
+                exit();
+            }
+            $stmt->close();
+        }
+
+        $conn->close();
+    } catch (mysqli_sql_exception $e) {
+        if (preg_match("/Errore: (.+)$/", $e->getMessage(), $matches)) {
+            $esito = "<p class='error'>" . htmlspecialchars($matches[1]) . "</p>";
+        } else {
+            $esito = "<p class='error'>Errore MySQL: " . htmlspecialchars($e->getMessage()) . "</p>";
+        }
+    } catch (Exception $e) {
+        $esito = "<p class='error'>Errore generico: " . htmlspecialchars($e->getMessage()) . "</p>";
+    }
 }
 ?>
 

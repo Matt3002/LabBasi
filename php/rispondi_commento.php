@@ -2,39 +2,43 @@
 session_start();
 require 'config.php';
 
-if (!isset($_SESSION['user_email'])) {
-    die("Errore: Accesso non autorizzato");
-}
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-$emailCreatore = $_SESSION['user_email'];
-$commentId = $_POST['commentId'];
-$testo = $_POST['testo'];
+try {
+    if (!isset($_SESSION['user_email'])) {
+        throw new Exception("Errore: Accesso non autorizzato");
+    }
 
-// Verifica che l'utente sia un creatore
-$conn = new mysqli($host, $username, $password, $dbname);
-if ($conn->connect_error) {
-    die("Connessione fallita: " . $conn->connect_error);
-}
+    $emailCreatore = $_SESSION['user_email'];
+    $commentId = $_POST['commentId'];
+    $testo = $_POST['testo'];
 
-$stmt = $conn->prepare("SELECT 1 FROM Creatore WHERE email_Utente = ?");
-$stmt->bind_param("s", $emailCreatore);
-$stmt->execute();
-$result = $stmt->get_result();
+    // Connessione al DB
+    $conn = new mysqli($host, $username, $password, $dbname);
 
-if ($result->num_rows === 0) {
-    die("Errore: Solo i creatori possono rispondere ai commenti");
-}
+    // Verifica che l'utente sia un creatore
+    $stmt = $conn->prepare("SELECT 1 FROM Creatore WHERE email_Utente = ?");
+    $stmt->bind_param("s", $emailCreatore);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-// Chiamata alla stored procedure
-$stmt = $conn->prepare("CALL RispondiCommento(?, ?, ?)");
-$stmt->bind_param("iss", $commentId, $testo, $emailCreatore);
+    if ($result->num_rows === 0) {
+        throw new Exception("Errore: Solo i creatori possono rispondere ai commenti");
+    }
 
-if ($stmt->execute()) {
+    // Inserimento risposta tramite procedura
+    $stmt = $conn->prepare("CALL RispondiCommento(?, ?, ?)");
+    $stmt->bind_param("iss", $commentId, $testo, $emailCreatore);
+    $stmt->execute();
+
     echo "success";
-} else {
-    echo "Errore durante l'inserimento della risposta: " . $stmt->error;
-}
 
-$stmt->close();
-$conn->close();
+    $stmt->close();
+    $conn->close();
+
+} catch (mysqli_sql_exception $e) {
+    echo "Errore MySQL: " . htmlspecialchars($e->getMessage());
+} catch (Exception $e) {
+    echo "Errore: " . htmlspecialchars($e->getMessage());
+}
 ?>
