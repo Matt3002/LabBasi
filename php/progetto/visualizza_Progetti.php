@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
-require 'config.php';
+require '../config.php';
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
@@ -45,8 +45,8 @@ if (isset($_POST['submit_commento']) && $emailSession) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bostarter</title>
-    <link rel="stylesheet" href="../css/dashboard.css">
-    <link rel="stylesheet" href="../css/options.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/options.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
         .success { color: green; }
@@ -78,12 +78,12 @@ if (isset($_POST['submit_commento']) && $emailSession) {
 <body>
 
 <div class="menu" onclick="toggleMenu()">☰</div>
-<header><h1><a href="dashboard/dashboard.php">Bostarter</a></h1></header>
+<header><h1><a href="../dashboard/dashboard.php">Bostarter</a></h1></header>
 
 <div id="sidebar" class="sidebar">
-    <a href="inserisci_Skill.php" onclick="toggleMenu()">Inserisci Skill</a>
+    <a href="../skill/inserisci_Skill.php" onclick="toggleMenu()">Inserisci Skill</a>
     <a href="visualizza_Progetti.php" onclick="toggleMenu()">Progetti Disponibili</a>
-    <a href="finanzia_Progetto.php" onclick="toggleMenu()">Finanzia un Progetto</a>
+    <a href="../finanziamento/finanzia_Progetto.php" onclick="toggleMenu()">Finanzia un Progetto</a>
 </div>
 
 <div class="content">
@@ -113,9 +113,9 @@ if (isset($_POST['submit_commento']) && $emailSession) {
                     echo "<div class='project-actions'>";
                     echo "<button onclick=\"toggleCommentSection('$progettoNome')\">Lascia un commento</button>";
                     if ($row['tipo'] == "software") {
-                        echo "<button onclick=\"location.href='visualizza_Profili.php?nome_progetto=" . urlencode($progettoNome) . "'\">Invia candidatura</button>";
+                        echo "<button onclick=\"location.href='../candidatura/visualizza_Profili.php?nome_progetto=" . urlencode($progettoNome) . "'\">Invia candidatura</button>";
                     }
-                    echo "<button onclick=\"location.href='finanzia_progetto.php?nome_progetto=" . urlencode($row['nome']) . "'\">Finanzia Progetto</button>";
+                    echo "<button onclick=\"location.href='../finanziamento/finanzia_progetto.php?nome_progetto=" . urlencode($row['nome']) . "'\">Finanzia Progetto</button>";
                     echo "</div>";
 
                     echo "<div id='comment-section-$progettoNome' class='comment-section'>";

@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'config.php';
+require '../config.php';
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 $conn = new mysqli($host, $username, $password, $dbname);
 

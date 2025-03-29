@@ -37,15 +37,15 @@ echo "<a href='logout.php'>Logout</a>";*/
     <div class="menu" onclick="toggleMenu()">☰</div>
     <header><h1><a href="dashboard_creatore.php">Bostarter</a></h1></header>
     <div id="sidebar" class="sidebar">
-        <a href="../inserisci_Skill.php" onclick="toggleMenu()">Inserisci Skill</a>
-        <a href="../visualizza_Progetti.php" onclick="toggleMenu()">Progetti Disponibili</a>
-        <a href="../finanzia_Progetto.php" onclick="toggleMenu()">Finanzia un Progetto</a>
+        <a href="../skill/inserisci_Skill.php" onclick="toggleMenu()">Inserisci Skill</a>
+        <a href="../progetto/visualizza_Progetti.php" onclick="toggleMenu()">Progetti Disponibili</a>
+        <a href="../finanziamento/finanzia_Progetto.php" onclick="toggleMenu()">Finanzia un Progetto</a>
         <div class="divider"></div>
-        <a href="../inserisci_Progetto.php" onclick="toggleMenu()">Inserisci Progetto</a>
-        <a href="../inserisci_reward.php" onclick="toggleMenu()">Inserisci Reward</a>
-        <a href="../miei_Progetti.php" onclick="toggleMenu()">I tuoi progetti</a>
+        <a href="../progetto/inserisci_Progetto.php" onclick="toggleMenu()">Inserisci Progetto</a>
+        <a href="../progetto/inserisci_reward.php" onclick="toggleMenu()">Inserisci Reward</a>
+        <a href="../progetto/miei_Progetti.php" onclick="toggleMenu()">I tuoi progetti</a>
         <a href="#" onclick="toggleMenu()">Inserisci Profilo</a>
-        <a href="../seleziona_componenti.php" onclick="toggleMenu()">Seleziona Componenti</a>
+        <a href="../progetto/seleziona_componenti.php" onclick="toggleMenu()">Seleziona Componenti</a>
     </div>
 
     <section class="content">

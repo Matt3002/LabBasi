@@ -3,7 +3,7 @@
 session_start();
 
 // Includi il file di configurazione per la connessione al database
-require 'config.php';
+require '../config.php';
 
 // Verifica se l'utente è loggato
 if (!isset($_SESSION['user_email'])) {
@@ -110,8 +110,8 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <title>Gestisci Profili - <?php echo htmlspecialchars($nomeProgetto); ?></title>
-    <link rel="stylesheet" href="../css/dashboard.css">
-    <link rel="stylesheet" href="../css/options.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/options.css">
     <style>
         .error { color: red; }
         .success { color: green; }

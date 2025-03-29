@@ -37,11 +37,11 @@ echo "<a href='logout.php'>Logout</a>";*/
     <div class="menu" onclick="toggleMenu()">☰</div>
     <header><h1><a href="dashboard_admin.php">Bostarter</a></h1></header>
     <div id="sidebar" class="sidebar">
-        <a href="../inserisci_Skill.php" onclick="toggleMenu()">Inserisci Skill</a>
-        <a href="../visualizza_Progetti.php" onclick="toggleMenu()">Progetti Disponibili</a>
-        <a href="../finanzia_Progetto.php" onclick="toggleMenu()">Finanzia un Progetto</a>
+        <a href="../skill/inserisci_Skill.php" onclick="toggleMenu()">Inserisci Skill</a>
+        <a href="../progetto/visualizza_Progetti.php" onclick="toggleMenu()">Progetti Disponibili</a>
+        <a href="../finanziamento/finanzia_Progetto.php" onclick="toggleMenu()">Finanzia un Progetto</a>
         <div class="divider"></div>
-        <a href="../gestione_Competenze.php" onclick="toggleMenu()">Gestione Competenze</a>
+        <a href="../skill/gestione_Competenze.php" onclick="toggleMenu()">Gestione Competenze</a>
     </div>
 
     <section class="content">

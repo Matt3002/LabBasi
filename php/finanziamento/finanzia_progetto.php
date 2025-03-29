@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'config.php';
+require '../config.php';
 
 $conn = new mysqli($host, $username, $password, $dbname);
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
@@ -17,7 +17,7 @@ $nome_progetto = $_GET['nome_progetto'] ?? '';
 $data_oggi = date("Y-m-d");
 
 if (empty($nome_progetto)) {
-    die("<script>alert('Errore: Nome progetto mancante.'); window.location.href = 'visualizza_Progetti.php';</script>");
+    die("<script>alert('Errore: Nome progetto mancante.'); window.location.href = '../progetto/visualizza_Progetti.php';</script>");
 }
 
 $mostraReward = false;
@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['scegli_reward'])) {
         $stmt->execute();
         $stmt->close();
 
-        header("Location: visualizza_Progetti.php");
+        header("Location: ../progetto/visualizza_Progetti.php");
         exit;
     } catch (mysqli_sql_exception $e) {
         if (preg_match("/Errore: (.+)$/", $e->getMessage(), $matches)) {

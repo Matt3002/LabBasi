@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'config.php';
+require '../config.php';
 
 $emailSession = $_SESSION['user_email'] ?? null;
 
@@ -32,8 +32,8 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>I Miei Progetti - Bostarter</title>
-    <link rel="stylesheet" href="../css/dashboard.css">
-    <link rel="stylesheet" href="../css/options.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/options.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
         .success { color: green; }
@@ -74,11 +74,11 @@ try {
 <body>
 
     <div class="menu" onclick="toggleMenu()">☰</div>
-    <header><h1><a href="dashboard/dashboard_creatore.php">Bostarter</a></h1></header>
+    <header><h1><a href="../dashboard/dashboard_creatore.php">Bostarter</a></h1></header>
     <div id="sidebar" class="sidebar">
-        <a href="inserisci_Skill.php" onclick="toggleMenu()">Inserisci Skill</a>
+        <a href="../skill/inserisci_Skill.php" onclick="toggleMenu()">Inserisci Skill</a>
         <a href="visualizza_Progetti.php" onclick="toggleMenu()">Progetti Disponibili</a>
-        <a href="finanzia_Progetto.php" onclick="toggleMenu()">Finanzia un Progetto</a>
+        <a href="../finanziamento/finanzia_Progetto.php" onclick="toggleMenu()">Finanzia un Progetto</a>
         <div class="divider"></div>
         <a href="inserisci_Progetto.php" onclick="toggleMenu()">Inserisci Progetto</a>
         <a href="miei_progetti.php" onclick="toggleMenu()">I Miei Progetti</a>
@@ -146,8 +146,8 @@ try {
                     echo "</div>";  
                     if ($progetto['tipo'] === 'software') {
                         echo "<div class='project-buttons'>";
-                        echo "<a href='inserisci_profilo.php?progetto=$nomeProgetto'>Inserisci Profilo</a>";
-                        echo "<a href='gestisci_candidature.php?progetto=$nomeProgetto'>Gestisci Candidature</a>";
+                        echo "<a href='../candidatura/inserisci_profilo.php?progetto=$nomeProgetto'>Inserisci Profilo</a>";
+                        echo "<a href='../candidatura/gestisci_candidature.php?progetto=$nomeProgetto'>Gestisci Candidature</a>";
                         echo "</div>";
                     }
                     if ($progetto['tipo'] === 'hardware') {

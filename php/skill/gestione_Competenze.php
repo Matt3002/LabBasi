@@ -1,10 +1,10 @@
 <?php
 session_start();
-require 'config.php'; // Contiene $host, $username, $password, $dbname
+require '../config.php'; // Contiene $host, $username, $password, $dbname
 
 // Controlla se l'utente è loggato e ha ruolo "Amministratore"
 if (!isset($_SESSION['user_email']) || $_SESSION['user_role'] !== 'Amministratore') {
-    header("Location: login/loginAmministratore.php");
+    header("Location: ../login/loginAmministratore.php");
     exit;
 }
 
@@ -53,7 +53,6 @@ $mysqli->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestione Competenze</title>
-    <link rel="stylesheet" href="style.css">
     <style>
         .success { color: green; font-weight: bold; }
         .error { color: red; font-weight: bold; }

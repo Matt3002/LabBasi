@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'config.php';
+require '../config.php';
 
 $emailSession = $_SESSION['user_email'] ?? null;
 $skillOptions = '';
@@ -64,8 +64,8 @@ if ($emailSession) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bostarter</title>
-    <link rel="stylesheet" href="../css/dashboard.css">
-    <link rel="stylesheet" href="../css/options.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/options.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
         .success { color: green; }
@@ -88,12 +88,12 @@ if ($emailSession) {
 <body>
 
     <div class="menu" onclick="toggleMenu()">☰</div>
-    <header><h1><a href="dashboard/dashboard.php">Bostarter</a></h1></header>
+    <header><h1><a href="../dashboard/dashboard.php">Bostarter</a></h1></header>
 
     <div id="sidebar" class="sidebar">
         <a href="inserisci_Skill.php" onclick="toggleMenu()">Inserisci Skill</a>
-        <a href="visualizza_Progetti.php" onclick="toggleMenu()">Progetti Disponibili</a>
-        <a href="finanzia_Progetto.php" onclick="toggleMenu()">Finanzia un Progetto</a>
+        <a href="../progetto/visualizza_Progetti.php" onclick="toggleMenu()">Progetti Disponibili</a>
+        <a href="..7finanziamento/finanzia_Progetto.php" onclick="toggleMenu()">Finanzia un Progetto</a>
     </div>
 
     <div class="content">

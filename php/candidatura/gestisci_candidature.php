@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'config.php';
+require '../config.php';
 
 $emailCreatore = $_SESSION['user_email'] ?? null;
 $nomeProgetto = $_GET['progetto'] ?? null;
@@ -31,7 +31,7 @@ $stmt->close();
 <head>
     <meta charset="UTF-8">
     <title>Gestisci Candidature</title>
-    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/dashboard.css">
     <style>
         .candidatura-box {
             border: 1px solid #ccc;

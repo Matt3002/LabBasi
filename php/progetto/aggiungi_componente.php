@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'config.php';
+require '../config.php';
 
 $nomeProgetto = $_POST['nome_progetto'] ?? null;
 $nomeComponente = $_POST['nome_componente'] ?? null;

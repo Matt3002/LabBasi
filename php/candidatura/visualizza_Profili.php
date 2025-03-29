@@ -4,7 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 session_start();
-require 'config.php';
+require '../config.php';
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
@@ -130,7 +130,7 @@ try {
             <?php endforeach; ?>
         <?php endif; ?>
 
-        <a href="dashboard.php">Torna alla Dashboard</a>
+        <a href="../dashboard/dashboard.php">Torna alla Dashboard</a>
     </div>
 </body>
 </html>

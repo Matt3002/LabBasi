@@ -4,7 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 session_start();
-include 'config.php'; // Connessione al database
+include '../config.php'; // Connessione al database
 
 $conn = new mysqli($host, $username, $password, $dbname);
 
@@ -15,7 +15,7 @@ if ($conn->connect_error) {
 
 // Verifica se l'utente è autenticato
 if (!isset($_SESSION['user_email'])) {
-    header("Location: login.php");
+    header("Location: ../login/login.php");
     exit();
 }
 
