@@ -159,7 +159,7 @@ $conn->close();
     <header>
         <h1><?php echo htmlspecialchars($nomeProgetto); ?></h1>
     </header>
-
+    <?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
     <div class="content">
         <section>
             <h2>Profili Associati</h2>

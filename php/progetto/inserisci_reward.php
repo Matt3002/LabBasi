@@ -68,7 +68,7 @@ $conn->close();
         body {
             font-family: "Segoe UI", sans-serif;
             background-color: #f5f7fa;
-            padding: 30px;
+            padding: 100px;
         }
 
         h2 {
@@ -143,7 +143,7 @@ $conn->close();
     </style>
 </head>
 <body>
-
+<?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
 <h2>Inserisci una Reward per uno dei tuoi progetti</h2>
 <?= $esito ?>
 

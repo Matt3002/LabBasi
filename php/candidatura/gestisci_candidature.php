@@ -47,6 +47,7 @@ $stmt->close();
     </style>
 </head>
 <body>
+    <?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
     <div class="content">
         <h2>Candidature in attesa per il progetto: <?= htmlspecialchars($nomeProgetto) ?></h2>
 

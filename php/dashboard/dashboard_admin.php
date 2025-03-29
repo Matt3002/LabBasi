@@ -18,31 +18,12 @@ echo "<a href='logout.php'>Logout</a>";*/
     <title>Bostarter</title>
     <link rel="stylesheet" href="../../css/dashboard.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <script>
-        function toggleMenu() {
-            let sidebar = document.getElementById("sidebar");
-            let menuButton = document.querySelector(".menu");
-            if (sidebar.style.left === "-250px" || sidebar.style.left === "") {
-                sidebar.style.left = "0px";
-                menuButton.style.left = "280px";
-            } else {
-                sidebar.style.left = "-250px";
-                menuButton.style.left = "30px";
-            }
-        }
-    </script>
 </head>
 <body>
     
-    <div class="menu" onclick="toggleMenu()">☰</div>
     <header><h1><a href="dashboard_admin.php">Bostarter</a></h1></header>
-    <div id="sidebar" class="sidebar">
-        <a href="../skill/inserisci_Skill.php" onclick="toggleMenu()">Inserisci Skill</a>
-        <a href="../progetto/visualizza_Progetti.php" onclick="toggleMenu()">Progetti Disponibili</a>
-        <a href="../finanziamento/finanzia_Progetto.php" onclick="toggleMenu()">Finanzia un Progetto</a>
-        <div class="divider"></div>
-        <a href="../skill/gestione_Competenze.php" onclick="toggleMenu()">Gestione Competenze</a>
-    </div>
+    <?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
+
 
     <section class="content">
         <div class="stats">

@@ -57,18 +57,6 @@ if (isset($_POST['submit_commento']) && $emailSession) {
         }
     </style>
     <script>
-        function toggleMenu() {
-            let sidebar = document.getElementById("sidebar");
-            let menuButton = document.querySelector(".menu");
-            if (sidebar.style.left === "-250px" || sidebar.style.left === "") {
-                sidebar.style.left = "0px";
-                menuButton.style.left = "280px";
-            } else {
-                sidebar.style.left = "-250px";
-                menuButton.style.left = "30px";
-            }
-        }
-
         function toggleCommentSection(progetto) {
             let commentSection = document.getElementById("comment-section-" + progetto);
             commentSection.style.display = commentSection.style.display === "block" ? "none" : "block";
@@ -77,14 +65,9 @@ if (isset($_POST['submit_commento']) && $emailSession) {
 </head>
 <body>
 
-<div class="menu" onclick="toggleMenu()">☰</div>
 <header><h1><a href="../dashboard/dashboard.php">Bostarter</a></h1></header>
 
-<div id="sidebar" class="sidebar">
-    <a href="../skill/inserisci_Skill.php" onclick="toggleMenu()">Inserisci Skill</a>
-    <a href="visualizza_Progetti.php" onclick="toggleMenu()">Progetti Disponibili</a>
-    <a href="../finanziamento/finanzia_Progetto.php" onclick="toggleMenu()">Finanzia un Progetto</a>
-</div>
+<?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
 
 <div class="content">
     <section>

@@ -96,7 +96,9 @@ try {
             unset($_SESSION['error']); // Rimuove il messaggio dopo la visualizzazione
         }
     ?>
+    <?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
     <div class="container">
+    
         <h2>Profili richiesti per il progetto: <?php echo htmlspecialchars($nome_progetto); ?></h2>
 
         <?php if (empty($profili)): ?>

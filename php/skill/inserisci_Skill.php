@@ -71,30 +71,12 @@ if ($emailSession) {
         .success { color: green; }
         .error { color: red; }
     </style>
-    <script>
-        function toggleMenu() {
-            let sidebar = document.getElementById("sidebar");
-            let menuButton = document.querySelector(".menu");
-            if (sidebar.style.left === "-250px" || sidebar.style.left === "") {
-                sidebar.style.left = "0px";
-                menuButton.style.left = "280px";
-            } else {
-                sidebar.style.left = "-250px";
-                menuButton.style.left = "30px";
-            }
-        }
-    </script>
 </head>
 <body>
 
-    <div class="menu" onclick="toggleMenu()">☰</div>
     <header><h1><a href="../dashboard/dashboard.php">Bostarter</a></h1></header>
 
-    <div id="sidebar" class="sidebar">
-        <a href="inserisci_Skill.php" onclick="toggleMenu()">Inserisci Skill</a>
-        <a href="../progetto/visualizza_Progetti.php" onclick="toggleMenu()">Progetti Disponibili</a>
-        <a href="..7finanziamento/finanzia_Progetto.php" onclick="toggleMenu()">Finanzia un Progetto</a>
-    </div>
+    <?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
 
     <div class="content">
         <section class="form-section">

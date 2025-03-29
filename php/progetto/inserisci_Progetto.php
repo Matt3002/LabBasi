@@ -75,19 +75,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $emailSession) {
 </head>
 <body>
     
-    <div class="menu" onclick="toggleMenu()">☰</div>
     <header><h1><a href="../dashboard/dashboard_creatore.php">Bostarter</a></h1></header>
-    <div id="sidebar" class="sidebar">
-        <a href="../skill/inserisci_Skill.php" onclick="toggleMenu()">Inserisci Skill</a>
-        <a href="visualizza_Progetti.php" onclick="toggleMenu()">Progetti Disponibili</a>
-        <a href="../finanziamento/finanzia_Progetto.php" onclick="toggleMenu()">Finanzia un Progetto</a>
-        <div class="divider"></div>
-        <a href="inserisci_Progetto.php" onclick="toggleMenu()">Inserisci Progetto</a>
-        <a href="#" onclick="toggleMenu()">Inserisci Reward</a>
-        <a href="#" onclick="toggleMenu()">Rispondi ai commenti</a>
-        <a href="#" onclick="toggleMenu()">Inserisci Profilo</a>
-        <a href="#" onclick="toggleMenu()">Gestione Candidature</a>
-    </div>
+    <?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
 
     <div class="content">
         <section>

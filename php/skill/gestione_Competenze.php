@@ -56,9 +56,13 @@ $mysqli->close();
     <style>
         .success { color: green; font-weight: bold; }
         .error { color: red; font-weight: bold; }
+        body{
+            padding-left:100px;
+        }
     </style>
 </head>
 <body>
+    <?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
     <h2>Gestione delle Competenze</h2>
     <p>Amministratore: <?php echo htmlspecialchars($email); ?></p>
 
