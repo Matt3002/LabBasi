@@ -1,20 +1,17 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php'; // Assicurati che Composer sia installato
-
-use MongoDB\Client;
-
-function logEvento($messaggio, $extra = []) {
+function logEvento($messaggio) {
     try {
-        $client = new Client("mongodb://localhost:27017");
-        $collection = $client->bostarter->log_eventi;
+        $manager = new MongoDB\Driver\Manager("mongodb://localhost:27017");
 
-        $evento = array_merge([
-            'timestamp' => new MongoDB\BSON\UTCDateTime(),
-            'messaggio' => $messaggio
-        ], $extra);
+        $bulk = new MongoDB\Driver\BulkWrite;
+        $bulk->insert([
+            "messaggio" => $messaggio,
+            "timestamp" => new MongoDB\BSON\UTCDateTime()
+        ]);
 
-        $collection->insertOne($evento);
+        $manager->executeBulkWrite("bostarter.log_eventi", $bulk);
     } catch (Exception $e) {
-        error_log("Errore MongoDB log: " . $e->getMessage());
+        error_log("Errore MongoDB: " . $e->getMessage());
     }
 }
+?>
