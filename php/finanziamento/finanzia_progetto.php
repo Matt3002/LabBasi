@@ -2,6 +2,8 @@
 session_start();
 require '../config.php';
 
+$basePath = "http://localhost/bostarter/LabBasi/php/";
+
 $conn = new mysqli($host, $username, $password, $dbname);
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
@@ -72,11 +74,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['scegli_reward'])) {
     <meta charset="UTF-8">
     <title>Finanzia Progetto</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 30px;
-            background-color: #f5f5f5;
-        }
         form {
             background: #fff;
             padding: 20px;
@@ -141,6 +138,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['scegli_reward'])) {
     <input type="submit" name="scegli_reward" value="Conferma Reward">
 </form>
 <?php endif; ?>
+
 
 </body>
 </html>
