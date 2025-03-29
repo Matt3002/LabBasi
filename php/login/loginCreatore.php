@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $_SESSION['user_email'] = $email;
             $_SESSION['user_role'] = "Creatore";
-            header("Location: ../dashboard/dashboard_creatore.php");
+            header("Location: ../dashboard/dashboard.php");
             exit();
 
         } catch (mysqli_sql_exception $e) {

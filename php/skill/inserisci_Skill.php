@@ -74,7 +74,7 @@ if ($emailSession) {
 </head>
 <body>
 
-    <header><h1><a href="../dashboard/dashboard.php">Bostarter</a></h1></header>
+    <?php include_once realpath(__DIR__ . '/../includes/header.php'); ?>
 
     <?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
 
@@ -111,24 +111,8 @@ if ($emailSession) {
         </section>
     </div>
 
-    <footer id="footerBase">
-        <div id="column">
-            <h4 id="wpp">Bostarter</h4>
-            <div id="contatti">
-                <a href="mailto:valeria.sensini2@studio.unibo.it"><h4>Contattaci</h4></a>
-                <h6>email: admin123@email.com </h6>
-            </div>
-            <div id="icon">
-                <h4>Seguici</h4>
-                <a href="#" style="margin-right: 2.4vw;"><i class="fab fa-facebook"></i></a>
-                <a href="#" style="margin-right: 2.4vw;"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-tiktok"></i></a>
-            </div>
-        </div>
-        <div id="diritti">
-            <p>© 2025 Bostarter. Tutti i diritti riservati.</p>
-        </div>
-    </footer>
+    <?php include_once realpath(__DIR__ . '/../includes/footer.php'); ?>
+
 
 </body>
 </html>

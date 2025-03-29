@@ -58,7 +58,6 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profili richiesti per <?php echo htmlspecialchars($nome_progetto); ?></title>
     <style>
-        body { font-family: Arial, sans-serif; }
         .container { width: 80%; margin: auto; }
         .profile-card { 
             border: 1px solid #ccc; 
@@ -74,17 +73,18 @@ try {
             margin-top: 10px;
             padding: 8px 12px;
             border: none;
-            background-color: #007BFF;
+            background-color: #28a745;
             color: white;
             cursor: pointer;
             border-radius: 5px;
         }
         .profile-card button:hover {
-            background-color: #0056b3;
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
+ 
     <?php
         if (isset($_SESSION['success'])) {
             echo "<p style='color: green; font-weight: bold;'>" . $_SESSION['success'] . "</p>";
@@ -134,6 +134,7 @@ try {
 
         <a href="../dashboard/dashboard.php">Torna alla Dashboard</a>
     </div>
+   
 </body>
 </html>
 

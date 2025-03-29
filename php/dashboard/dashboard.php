@@ -21,7 +21,7 @@ echo "<a href='logout.php'>Logout</a>";*/
 </head>
 <body>
     
-    <header><h1><a href="dashboard.php">Bostarter</a></h1></header>
+    <?php include_once realpath(__DIR__ . '/../includes/header.php'); ?>
     <?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
 
     <section class="content">
@@ -103,30 +103,8 @@ echo "<a href='logout.php'>Logout</a>";*/
         </div>
     </section>
 
-    <footer id="footerBase">
+    
+    <?php include_once realpath(__DIR__ . '/../includes/footer.php'); ?>
 
-        <div id="column">
-            <h4 id="wpp">Bostarter</h4>
-
-            <div id="contatti">
-                <a href="mailto:valeria.sensini2@studio.unibo.it"><h4>Contattaci</h4></a>
-                <h6>email: admin123@email.com </h6>
-            </div>
-
-            <div id="icon">
-                <h4>Seguici</h4>
-                <a href="#" style="margin-right: 2.4vw;"><i class="fab fa-facebook"></i></a>
-                <span></span>
-                <a href="#" style="margin-right: 2.4vw;"><i class="fab fa-instagram"></i></a>
-                <span></span>
-                <a href="#"><i class="fab fa-tiktok"></i></a>
-            </div>
-        </div>
-
-        <div id="diritti">
-            <p>© 2025 Bostarter. Tutti i diritti riservati.</p>
-        </div>
-
-    </footer>
 </body>
 </html>

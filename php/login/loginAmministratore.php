@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $_SESSION['user_email'] = $email;
             $_SESSION['user_role'] = "Amministratore";
-            header("Location: ../dashboard/dashboard_admin.php");
+            header("Location: ../dashboard/dashboard.php");
             exit();
 
         } catch (mysqli_sql_exception $e) {
