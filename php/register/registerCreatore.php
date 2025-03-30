@@ -44,7 +44,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     } catch (mysqli_sql_exception $e) {
         echo "<script>
-            alert('Errore: " . addslashes($e->getMessage()) . "');
+            alert(' " . addslashes($e->getMessage()) . "');
+            window.location.href = '../login/login.php';
         </script>";
         if (isset($stmt)) $stmt->close();
         if (isset($conn)) $conn->close();
@@ -60,15 +61,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <!-- Form per la registrazione del creatore -->
-    <form method="POST">
-        <input type="email" name="email" placeholder="Email" required>
-        <input type="text" name="nickname" placeholder="Nickname" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <input type="text" name="nome" placeholder="Nome" required>
-        <input type="text" name="cognome" placeholder="Cognome" required>
-        <input type="number" name="anno_nascita" placeholder="Anno di nascita" required>
-        <input type="text" name="luogo_nascita" placeholder="Luogo di nascita" required>
-        <button type="submit">Registrati come Creatore</button>
-    </form>
+    <div class="container">
+        <a class="btn-home" href="../../index.html">← Torna alla Home</a>
+        <h2>Registrazione Creatore</h2>
+        <form method="POST">
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="text" name="nickname" placeholder="Nickname" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="text" name="nome" placeholder="Nome" required>
+            <input type="text" name="cognome" placeholder="Cognome" required>
+            <input type="number" name="anno_nascita" placeholder="Anno di nascita" required>
+            <input type="text" name="luogo_nascita" placeholder="Luogo di nascita" required>
+            <button type="submit">Registrati</button>
+            
+        </form>
+        <p style="text-align:center; margin-top:10px;">
+            Sei registrato? <a href="../login/loginCreatore.php">Vai al login</a>
+        </p>
+    </div>
 </body>
 </html>

@@ -45,7 +45,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     } catch (mysqli_sql_exception $e) {
         $error = $e->getMessage();
-        echo "<script>alert('" . addslashes($error) . "');</script>";
+        echo "<script>alert('" . addslashes($error) . "');
+        window.location.href = '../login/login.php';</script>";
         if (isset($stmt)) $stmt->close();
         if (isset($conn)) $conn->close();
     }
@@ -59,16 +60,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>
-    <form method="POST">
-        <input type="email" name="email" placeholder="Email" required>
-        <input type="text" name="nickname" placeholder="Nickname" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <input type="text" name="nome" placeholder="Nome" required>
-        <input type="text" name="cognome" placeholder="Cognome" required>
-        <input type="number" name="anno_nascita" placeholder="Anno di nascita" required>
-        <input type="text" name="luogo_nascita" placeholder="Luogo di nascita" required>
-        <input type="text" name="codice_sicurezza" placeholder="Codice di sicurezza" required>
-        <button type="submit">Registrati come Amministratore</button>
-    </form>
+    <div class="container">
+        <a class="btn-home" href="../../index.html">← Torna alla Home</a>
+        <h2>Registrazione Amministratore</h2>
+        <form method="POST">
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="text" name="nickname" placeholder="Nickname" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <input type="text" name="codice_sicurezza" placeholder="Codice di sicurezza" required>
+            <input type="text" name="nome" placeholder="Nome" required>
+            <input type="text" name="cognome" placeholder="Cognome" required>
+            <input type="number" name="anno_nascita" placeholder="Anno di nascita" required>
+            <input type="text" name="luogo_nascita" placeholder="Luogo di nascita" required>
+            <button type="submit">Registrati</button>
+            
+        </form>
+        <p style="text-align:center; margin-top:10px;">
+            Sei registrato? <a href="../login/loginAmministratore.php">Vai al login</a>
+        </p>
+    </div>
 </body>
 </html>
