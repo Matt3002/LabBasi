@@ -67,20 +67,21 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <title>Inserisci Reward</title>
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/options.css">
     <style>
-        body {
-            font-family: "Segoe UI", sans-serif;
-            background-color: #f5f7fa;
-            padding: 100px;
+        body{
+            text-align: center;
         }
-
+        
         h2 {
             color: #333;
             margin-bottom: 20px;
-            margin-left:200px;
+            margin-top: 200px;
         }
 
         form {
+            margin-top: 200px;
             background: white;
             padding: 25px;
             border-radius: 10px;
@@ -113,7 +114,7 @@ $conn->close();
 
         input[type="submit"] {
             margin-top: 20px;
-            background-color: #007bff;
+            background-color: #3aaa06;
             color: white;
             border: none;
             padding: 10px 16px;
@@ -123,7 +124,7 @@ $conn->close();
         }
 
         input[type="submit"]:hover {
-            background-color: #0056b3;
+            background-color:rgb(49, 136, 9);
         }
 
         .msg {
@@ -147,6 +148,7 @@ $conn->close();
     </style>
 </head>
 <body>
+<?php include_once realpath(__DIR__ . '/../includes/header.php'); ?>
 <?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
 <h2>Inserisci una Reward per uno dei tuoi progetti</h2>
 <?= $esito ?>
@@ -168,6 +170,7 @@ $conn->close();
 
     <input type="submit" value="Inserisci Reward">
 </form>
+<?php include_once realpath(__DIR__ . '/../includes/footer.php'); ?>
 
 </body>
 </html>

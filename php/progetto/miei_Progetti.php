@@ -48,7 +48,7 @@ try {
         .comment-section {
             margin-top: 10px;
             padding-left: 10px;
-            border-left: 3px solid #007BFF;
+            border-left: 3px solid #3aaa06s;
         }
         .project-buttons {
             margin-top: 15px;
@@ -60,21 +60,21 @@ try {
             text-decoration: none;
             padding: 8px 12px;
             border-radius: 5px;
-            background-color: #007BFF;
+            background-color: #3aaa06;
             color: white;
             font-weight: bold;
             transition: 0.3s;
             font-size: 14px;
         }
         .project-buttons a:hover {
-            background-color: #0056b3;
+            background-color: #3aaa06;
         }
     </style>
 </head>
 <body>
 
 
-    <header><h1><a href="../dashboard/dashboard_creatore.php">Bostarter</a></h1></header>
+    <?php include_once realpath(__DIR__ . '/../includes/header.php'); ?>
     <?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
 
     <div class="content">
@@ -159,24 +159,7 @@ try {
         </section>
     </div>
 
-    <footer id="footerBase">
-        <div id="column">
-            <h4 id="wpp">Bostarter</h4>
-            <div id="contatti">
-                <a href="mailto:valeria.sensini2@studio.unibo.it"><h4>Contattaci</h4></a>
-                <h6>email: admin123@email.com </h6>
-            </div>
-            <div id="icon">
-                <h4>Seguici</h4>
-                <a href="#" style="margin-right: 2.4vw;"><i class="fab fa-facebook"></i></a>
-                <a href="#" style="margin-right: 2.4vw;"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-tiktok"></i></a>
-            </div>
-        </div>
-        <div id="diritti">
-            <p>© 2025 Bostarter. Tutti i diritti riservati.</p>
-        </div>
-    </footer>
+    <?php include_once realpath(__DIR__ . '/../includes/footer.php'); ?>
     <script>
         document.querySelectorAll('.submit-reply').forEach(button => {
             button.addEventListener('click', function() {

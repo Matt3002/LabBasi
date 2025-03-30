@@ -58,6 +58,72 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $emailSession) {
     <link rel="stylesheet" href="../../css/options.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
+        <style>
+            .success {
+                color: green;
+                font-weight: bold;
+                margin-bottom: 1em;
+            }
+
+            .error {
+                color: red;
+                font-weight: bold;
+                margin-bottom: 1em;
+            }
+
+            form {
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #f9f9f9;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            }
+
+            form label {
+                display: block;
+                margin: 10px 0 5px;
+                font-weight: 600;
+            }
+
+            form input[type="text"],
+            form input[type="number"],
+            form input[type="date"],
+            form textarea,
+            form select {
+                width: 100%;
+                padding: 8px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                box-sizing: border-box;
+            }
+
+            form textarea {
+                resize: vertical;
+                min-height: 80px;
+            }
+
+            button[type="submit"] {
+                margin-top: 20px;
+                background-color: #3aaa06;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: bold;
+            }
+
+            button[type="submit"]:hover {
+                background-color:rgb(46, 136, 4);
+            }
+
+            section h2 {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+        </style>
+
         .success { color: green; }
         .error { color: red; }
     </style>
@@ -77,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $emailSession) {
 </head>
 <body>
     
-    <header><h1><a href="../dashboard/dashboard.php">Bostarter</a></h1></header>
+    <?php include_once realpath(__DIR__ . '/../includes/header.php'); ?>
     <?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
 
     <div class="content">
@@ -120,24 +186,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $emailSession) {
         </section>
     </div>
 
-    <footer id="footerBase">
-        <div id="column">
-            <h4 id="wpp">Bostarter</h4>
-            <div id="contatti">
-                <a href="mailto:valeria.sensini2@studio.unibo.it"><h4>Contattaci</h4></a>
-                <h6>email: admin123@email.com </h6>
-            </div>
-            <div id="icon">
-                <h4>Seguici</h4>
-                <a href="#" style="margin-right: 2.4vw;"><i class="fab fa-facebook"></i></a>
-                <a href="#" style="margin-right: 2.4vw;"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-tiktok"></i></a>
-            </div>
-        </div>
-        <div id="diritti">
-            <p>© 2025 Bostarter. Tutti i diritti riservati.</p>
-        </div>
-    </footer>
+    <?php include_once realpath(__DIR__ . '/../includes/footer.php'); ?>
 
 </body>
 </html>

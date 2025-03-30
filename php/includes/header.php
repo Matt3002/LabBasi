@@ -29,7 +29,7 @@ if (isset($_SESSION['user_email'])) {
     $stmt->close();
 }
 ?>
-<header style="background-color: green; color: white; padding: 20px; text-align: center;">
+<header style="background-color: green; color: white !important; padding: 20px; text-align: center;">
   <h1>Benvenuto in Bostarter, <?php echo htmlspecialchars($nickname); ?></h1>
  <a href="<?= $basePath ?>dashboard/dashboard.php">Torna alla home</a>
 </header>
