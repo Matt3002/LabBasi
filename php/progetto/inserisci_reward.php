@@ -77,6 +77,7 @@ $conn->close();
         h2 {
             color: #333;
             margin-bottom: 20px;
+            margin-left:200px;
         }
 
         form {
