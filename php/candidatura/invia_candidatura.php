@@ -5,6 +5,7 @@ error_reporting(E_ALL);
 
 session_start();
 include '../config.php'; // Connessione al database
+require_once '../includes/mongo_logger.php';
 
 $conn = new mysqli($host, $username, $password, $dbname);
 
@@ -37,6 +38,7 @@ try {
     $stmt->bind_param("sis", $email_utente, $id_profilo, $nome_progetto);
     $stmt->execute();
     $_SESSION['success'] = "Candidatura inviata con successo!";
+    logEvento("L'utente $email_utente si è candidato per il profilo $id_profilo nel progetto $nome_progetto");
     $stmt->close();
 } catch (mysqli_sql_exception $e) {
     // Salva il messaggio di errore della procedura in sessione

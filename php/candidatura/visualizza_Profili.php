@@ -85,19 +85,19 @@ try {
 </head>
 <body>
  
-    <?php
-        if (isset($_SESSION['success'])) {
-            echo "<p style='color: green; font-weight: bold;'>" . $_SESSION['success'] . "</p>";
-            unset($_SESSION['success']); // Rimuove il messaggio dopo la visualizzazione
-        }
-
-        if (isset($_SESSION['error'])) {
-            echo "<p style='color: red; font-weight: bold;'>" . $_SESSION['error'] . "</p>";
-            unset($_SESSION['error']); // Rimuove il messaggio dopo la visualizzazione
-        }
-    ?>
-    <?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
     <div class="container">
+        <?php
+            if (isset($_SESSION['success'])) {
+                echo "<p style='color: green; font-weight: bold;'>" . $_SESSION['success'] . "</p>";
+                unset($_SESSION['success']); // Rimuove il messaggio dopo la visualizzazione
+            }
+
+            if (isset($_SESSION['error'])) {
+                echo "<p style='color: red; font-weight: bold;'>" . $_SESSION['error'] . "</p>";
+                unset($_SESSION['error']); // Rimuove il messaggio dopo la visualizzazione
+            }
+        ?>
+    <?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
     
         <h2>Profili richiesti per il progetto: <?php echo htmlspecialchars($nome_progetto); ?></h2>
 

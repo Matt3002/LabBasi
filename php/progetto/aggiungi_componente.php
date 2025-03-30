@@ -1,6 +1,7 @@
 <?php
 session_start();
 require '../config.php';
+require_once '../includes/mongo_logger.php';
 
 $nomeProgetto = $_POST['nome_progetto'] ?? null;
 $nomeComponente = $_POST['nome_componente'] ?? null;
@@ -30,6 +31,7 @@ try {
     $stmt->execute();
     $stmt->close();
 
+    logEvento("Componenti aggiunte per il progetto $nomeProgetto: $quantita $nomeComponente");
     $_SESSION['success'] = "Componente aggiunta con successo.";
 } catch (mysqli_sql_exception $e) {
     $_SESSION['error'] = "Errore durante l'aggiunta: " . $e->getMessage();

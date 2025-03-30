@@ -1,6 +1,7 @@
 <?php
 session_start();
 require '../config.php';
+require_once '../includes/mongo_logger.php';
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
@@ -32,7 +33,7 @@ try {
     $stmt->execute();
 
     echo "success";
-
+    logEvento("Il creatore $emailCreatore ha risposto al commento $commentId");
     $stmt->close();
     $conn->close();
 

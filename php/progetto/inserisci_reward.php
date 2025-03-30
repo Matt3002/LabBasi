@@ -1,6 +1,8 @@
 <?php
 session_start();
 require '../config.php';
+require_once '../includes/mongo_logger.php';
+
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 $conn = new mysqli($host, $username, $password, $dbname);
 
@@ -44,6 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute();
 
         $esito = "<div class='msg success'>Reward inserita con successo!</div>";
+        logEvento("Inserita nuova reward per il progetto $nome_progetto");
         $stmt->close();
     } catch (mysqli_sql_exception $e) {
         if (preg_match("/Errore: (.+)$/", $e->getMessage(), $matches)) {

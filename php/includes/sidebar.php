@@ -12,14 +12,16 @@ $basePath = "http://localhost/bostarter/LabBasi/php/";
 <!-- Sidebar dinamica -->
 <div id="sidebar" class="sidebar">
     <?php if ($_SESSION['user_role'] === 'Utente'): ?>
-        <a href="<?= $basePath ?>skill/inserisci_Skill.php" onclick="toggleMenu()">Inserisci Skill</a>
+        <a href="<?= $basePath ?>dashboard/dashboard.php" onclick="toggleMenu()">Torna alla Dashboard</a>
+        <a href="<?= $basePath ?>skill/inserisci_Skill.php" onclick="toggleMenu()">Gestisci Curriculum</a>
         <a href="<?= $basePath ?>progetto/visualizza_Progetti.php" onclick="toggleMenu()">Progetti Disponibili</a>
         <div class="esci">
             <a href="<?= $basePath ?>auth/logout.php" onclick="toggleMenu()" class="esci">Esci</a>
         </div>
 
     <?php elseif ($_SESSION['user_role'] === 'Creatore'): ?>
-        <a href="<?= $basePath ?>skill/inserisci_Skill.php" onclick="toggleMenu()">Inserisci Skill</a>
+        <a href="<?= $basePath ?>dashboard/dashboard.php" onclick="toggleMenu()">Torna alla Dashboard</a>
+        <a href="<?= $basePath ?>skill/inserisci_Skill.php" onclick="toggleMenu()">Gestisci Curriculum</a>
         <a href="<?= $basePath ?>progetto/visualizza_Progetti.php" onclick="toggleMenu()">Progetti Disponibili</a>
         <a href="<?= $basePath ?>progetto/inserisci_Progetto.php" onclick="toggleMenu()">Inserisci Progetto</a>
         <a href="<?= $basePath ?>progetto/inserisci_reward.php" onclick="toggleMenu()">Inserisci Reward</a>
@@ -29,7 +31,8 @@ $basePath = "http://localhost/bostarter/LabBasi/php/";
         </div>
 
     <?php elseif ($_SESSION['user_role'] === 'Amministratore'): ?>
-        <a href="<?= $basePath ?>skill/inserisci_Skill.php" onclick="toggleMenu()">Inserisci Skill</a>
+        <a href="<?= $basePath ?>dashboard/dashboard.php" onclick="toggleMenu()">Torna alla Dashboard</a>
+        <a href="<?= $basePath ?>skill/inserisci_Skill.php" onclick="toggleMenu()">Gestisci Curriculum</a>
         <a href="<?= $basePath ?>progetto/visualizza_Progetti.php" onclick="toggleMenu()">Progetti Disponibili</a>
         <a href="<?= $basePath ?>skill/gestione_Competenze.php" onclick="toggleMenu()">Gestione Competenze</a>
         <div class="esci">

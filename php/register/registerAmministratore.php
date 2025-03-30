@@ -1,54 +1,54 @@
 <?php
-// Inclusione del file di configurazione per la connessione al database
 require '../config.php';
-$conn = new mysqli($host, $username, $password, $dbname);
+require_once '../includes/mongo_logger.php';
 
-// Abilita la visualizzazione degli errori
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-// Controllo se il form è stato inviato
+
+$error = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Recupero dei dati inviati dal form
     $email = $_POST['email'];
     $nickname = $_POST['nickname'];
-    // Hash della password per sicurezza
-    $password = $_POST['password'];
+    $user_password = $_POST['password'];  // rinominata per evitare conflitto con config
     $nome = $_POST['nome'];
     $cognome = $_POST['cognome'];
     $anno_nascita = $_POST['anno_nascita'];
     $luogo_nascita = $_POST['luogo_nascita'];
     $codice_sicurezza = $_POST['codice_sicurezza'];
 
-    // Preparazione della query SQL che chiama la stored procedure per la registrazione dell'utente
-    $stmt = $conn->prepare("CALL RegistrazioneUtente(?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssssis", $email, $nickname, $password, $nome, $cognome, $anno_nascita, $luogo_nascita);
-    
-    // Esecuzione della query e gestione dell'esito
-    if ($stmt->execute()) {
-        // Dopo la registrazione come utente, inseriamo il codice di sicurezza nella tabella Amministratore
+    try {
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+        $conn = new mysqli($host, $username, $password, $dbname);
+
+        // Inserimento nella tabella Utente tramite procedura
+        $stmt = $conn->prepare("CALL RegistrazioneUtente(?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssssis", $email, $nickname, $user_password, $nome, $cognome, $anno_nascita, $luogo_nascita);
+        $stmt->execute();
         $stmt->close();
+        $conn->next_result();
+
+        // Inserimento del codice di sicurezza nella tabella Amministratore
         $stmt = $conn->prepare("INSERT INTO Amministratore (email_Utente, codice_sicurezza) VALUES (?, ?)");
         $stmt->bind_param("ss", $email, $codice_sicurezza);
-        
-        if ($stmt->execute()) {
-            echo "<script>
-            alert('Registrazione amministratore completata con successo! Ora verrai reindirizzato al login.');
-            window.location.href = 'loginAmministratore.php';
-          </script>";
-        } else {
-            echo "<script>
-                alert('Errore nell' aggiunta del codice di sicurezza: " . addslashes($stmt->error) . "');
-              </script>";
-        }
-    } else {
+        $stmt->execute();
+        $stmt->close();
+        $conn->close();
+
+        logEvento("Nuovo amministratore registrato: $email");
+
         echo "<script>
-                alert('Errore nella registrazione: " . addslashes($stmt->error) . "');
-              </script>";
+            alert('Registrazione amministratore completata con successo! Ora verrai reindirizzato al login.');
+            window.location.href = '../login/loginAmministratore.php';
+        </script>";
+        exit();
+
+    } catch (mysqli_sql_exception $e) {
+        $error = $e->getMessage();
+        echo "<script>alert('" . addslashes($error) . "');</script>";
+        if (isset($stmt)) $stmt->close();
+        if (isset($conn)) $conn->close();
     }
-    
-    // Chiusura dello statement e della connessione
-    $stmt->close();
-    $conn->close();
 }
 ?>
 
@@ -59,7 +59,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="../../css/style.css">
 </head>
 <body>
-    <!-- Form per la registrazione dell'amministratore -->
     <form method="POST">
         <input type="email" name="email" placeholder="Email" required>
         <input type="text" name="nickname" placeholder="Nickname" required>

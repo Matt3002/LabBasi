@@ -1,6 +1,7 @@
 <?php
 session_start();
 require '../config.php';
+require_once '../includes/mongo_logger.php';
 
 $basePath = "http://localhost/bostarter/LabBasi/php/";
 
@@ -37,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['finanzia'])) {
 
         $mostraReward = true; // Abilita il form reward
         $esito = "<div class='msg success'>Finanziamento registrato con successo! Ora seleziona una reward.</div>";
+        logEvento("L'utente $email_utente ha erogato un finanziamento per il progetto $nome_progetto");
     } catch (mysqli_sql_exception $e) {
         if (preg_match("/Errore: (.+)$/", $e->getMessage(), $matches)) {
             $esito = "<div class='msg error'>" . htmlspecialchars($matches[1]) . "</div>";

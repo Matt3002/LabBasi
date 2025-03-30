@@ -4,6 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 session_start();
 require '../config.php';
+require_once '../includes/mongo_logger.php';
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
@@ -20,6 +21,7 @@ if (isset($_POST['submit_commento']) && $emailSession) {
 
         $stmt = $conn->prepare("CALL AggiungiCommento(?, ?, ?, ?)");
         $stmt->bind_param("ssss", $emailSession, $progetto, $data, $testo);
+        logEvento("L'utente $emailSession ha aggiunto un commento al progetto $progetto");
 
         if ($stmt->execute()) {
             header("Location: visualizza_Progetti.php");

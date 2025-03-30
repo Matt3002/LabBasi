@@ -1,6 +1,7 @@
 <?php
 session_start();
 require '../config.php';
+require_once '../includes/mongo_logger.php';
 
 $emailSession = $_SESSION['user_email'] ?? null;
 $dataInserimento = date('Y-m-d'); // Data odierna
@@ -31,6 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $emailSession) {
             $stmt = $conn->prepare("CALL InserisciProgetto(?, ?, ?, ?, ?, ?, ?, ?)");
             $stmt->bind_param("sssdssss", $_POST["nome"], $_POST["descrizione"], $dataInserimento, $_POST["budget"], $_POST["data_limite"], $_POST["stato"], $_POST["tipo"], $emailSession);
             $stmt->execute();
+            logEvento("Creato nuovo progetto: " . $_POST["nome"]);
             $esito = "<p class='success'>Progetto inserito con successo!</p>";
         }
 
@@ -75,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $emailSession) {
 </head>
 <body>
     
-    <header><h1><a href="../dashboard/dashboard_creatore.php">Bostarter</a></h1></header>
+    <header><h1><a href="../dashboard/dashboard.php">Bostarter</a></h1></header>
     <?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
 
     <div class="content">

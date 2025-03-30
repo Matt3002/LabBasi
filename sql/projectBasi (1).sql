@@ -268,6 +268,20 @@ BEGIN
 END //
 DELIMITER ;
 
+-- Stored Procedure per visualizzare il tuo curriculum
+DELIMITER //
+
+CREATE PROCEDURE VisualizzaSkillCurriculum(
+    IN p_email VARCHAR(50)
+)
+BEGIN
+    SELECT nome_Competenza AS competenza, livello
+    FROM Curriculum
+    WHERE email_Utente = p_email;
+END //
+
+DELIMITER ;
+
 -- Stored Procedure per visualizzare le skill che non hai ancora aggiunto
 DELIMITER //
 CREATE PROCEDURE VisualizzaSkillDisponibili(IN p_email VARCHAR(50))

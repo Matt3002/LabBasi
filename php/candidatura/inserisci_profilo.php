@@ -4,6 +4,7 @@ session_start();
 
 // Includi il file di configurazione per la connessione al database
 require '../config.php';
+require_once '../includes/mongo_logger.php';
 
 // Verifica se l'utente è loggato
 if (!isset($_SESSION['user_email'])) {
@@ -41,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['profilo_da_aggiungere
         $stmtInserisci->bind_param("si", $nomeProgetto, $idProfiloDaAggiungere);
         if ($stmtInserisci->execute()) {
             echo "<p class='success'>Profilo aggiunto con successo.</p>";
+            logEvento("Profilo $idProfiloDaAggiungere aggiunto a progetto $nomeProgetto");
         } else {
             echo "<p class='error'>Errore nell'aggiunta del profilo.</p>";
         }

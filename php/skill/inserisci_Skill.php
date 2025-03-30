@@ -1,16 +1,38 @@
 <?php
 session_start();
 require '../config.php';
+require_once '../includes/mongo_logger.php';
 
 $emailSession = $_SESSION['user_email'] ?? null;
 $skillOptions = '';
 $hasAvailableSkills = false;
 $esito = '';
+$curriculumTable = ''; 
 
 if ($emailSession) {
     try {
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
         $conn = new mysqli($host, $username, $password, $dbname);
+
+        $stmt = $conn->prepare("CALL VisualizzaSkillCurriculum(?)");
+        $stmt->bind_param("s", $emailSession);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $curriculumTable .= "<table class='curriculum-table'>";
+            $curriculumTable .= "<thead><tr><th>Skill</th><th>Livello</th></tr></thead><tbody>";
+            while ($row = $result->fetch_assoc()) {
+                $skill = htmlspecialchars($row['competenza']);
+                $livello = (int)$row['livello'];
+                $curriculumTable .= "<tr><td>{$skill}</td><td>{$livello}</td></tr>";
+            }
+            $curriculumTable .= "</tbody></table>";
+        } else {
+            $curriculumTable = "<p>Non hai ancora aggiunto nessuna skill al tuo curriculum.</p>";
+        }
+        $stmt->close();
+        $conn->next_result();
 
         // Recupero delle skill disponibili
         $stmt = $conn->prepare("CALL VisualizzaSkillDisponibili(?)");
@@ -37,6 +59,7 @@ if ($emailSession) {
 
             $stmt = $conn->prepare("CALL AggiungiSkillCurriculum(?, ?, ?)");
             $stmt->bind_param("ssi", $emailSession, $competenza, $livello);
+            logEvento("L'utente $emailSession ha aggiunto la competenza $competenza di livello $livello al proprio curriculum");
 
             if ($stmt->execute()) {
                 header("Location: inserisci_Skill.php");
@@ -58,6 +81,7 @@ if ($emailSession) {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -70,6 +94,19 @@ if ($emailSession) {
     <style>
         .success { color: green; }
         .error { color: red; }
+        .curriculum-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        .curriculum-table th, .curriculum-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        .curriculum-table th {
+            background-color: #f0f0f0;
+        }
     </style>
 </head>
 <body>
@@ -79,6 +116,10 @@ if ($emailSession) {
     <?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
 
     <div class="content">
+        <section class="form-section">
+            <h3>Il tuo curriculum</h3>
+            <?php echo $curriculumTable; ?>
+        </section>
         <section class="form-section">
             <h3>Aggiungi una Skill al Curriculum</h3>
             <?php echo $esito; ?>
