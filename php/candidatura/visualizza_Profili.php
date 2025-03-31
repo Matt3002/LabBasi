@@ -56,6 +56,8 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/dashboard.css">
+    <link rel="stylesheet" href="../../css/options.css">
     <title>Profili richiesti per <?php echo htmlspecialchars($nome_progetto); ?></title>
     <style>
         .container { width: 80%; margin: auto; }

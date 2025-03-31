@@ -145,21 +145,21 @@ $conn->close();
         }
         .add-profile-form button {
             padding: 5px 10px;
-            background-color: #007BFF;
+            background-color: #28a745;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
         .add-profile-form button:hover {
-            background-color: #0056b3;
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1><?php echo htmlspecialchars($nomeProgetto); ?></h1>
+        <h1 style="color: white"><?php echo htmlspecialchars($nomeProgetto); ?></h1>
     </header>
     <?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
     <div class="content">

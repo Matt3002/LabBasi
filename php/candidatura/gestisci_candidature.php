@@ -48,6 +48,7 @@ $stmt->close();
 </head>
 <body>
     <?php include_once realpath(__DIR__ . '/../includes/sidebar.php'); ?>
+    <?php include_once realpath(__DIR__ . '/../includes/header.php'); ?>
     <div class="content">
         <h2>Candidature in attesa per il progetto: <?= htmlspecialchars($nomeProgetto) ?></h2>
 
@@ -69,6 +70,7 @@ $stmt->close();
             <p>Nessuna candidatura in attesa.</p>
         <?php endif; ?>
     </div>
+    <?php include_once realpath(__DIR__ . '/../includes/footer.php'); ?>
 </body>
 </html>
 
