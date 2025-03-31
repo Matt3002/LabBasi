@@ -131,7 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['scegli_reward'])) {
     <input type="number" step="0.01" min="0.01" name="importo" required>
     <input type="submit" name="finanzia" value="Finanzia Ora">
 </form>
-<a class="back-link" href="../progetto/miei_progetti.php">← Torna ai tuoi progetti</a>
+<a class="back-link" href="../progetto/visualizza_Progetti.php">← Torna ai tuoi progetti</a>
 <?php endif; ?>
 
 <?php if ($mostraReward): ?>
