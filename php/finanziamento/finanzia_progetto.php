@@ -76,6 +76,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['scegli_reward'])) {
     <meta charset="UTF-8">
     <title>Finanzia Progetto</title>
     <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 30px; 
+            justify-self: center;
+        }
         form {
             background: #fff;
             padding: 20px;
@@ -106,6 +111,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['scegli_reward'])) {
         }
         .success { background-color: #d4edda; color: #155724; }
         .error { background-color: #f8d7da; color: #721c24; }
+        a.back-link {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #218838;
+        }
     </style>
 </head>
 <body>
@@ -117,9 +128,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['scegli_reward'])) {
 <?php if (!$mostraReward): ?>
 <form method="post">
     <label>Importo (€):</label>
-    <input type="number" step="0.01" name="importo" required>
+    <input type="number" step="0.01" min="0.01" name="importo" required>
     <input type="submit" name="finanzia" value="Finanzia Ora">
 </form>
+<a class="back-link" href="../progetto/miei_progetti.php">← Torna ai tuoi progetti</a>
 <?php endif; ?>
 
 <?php if ($mostraReward): ?>
