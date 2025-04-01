@@ -50,7 +50,7 @@ $conn->close();
         .success { color: green; }
         .error { color: red; }
         .container {
-            padding-top: 200px; /* o l’altezza effettiva del tuo header */
+            padding-top: 200px;
             display: flex;
             justify-content: center;
             flex-direction: column;

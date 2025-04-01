@@ -8,9 +8,11 @@ require_once '../includes/mongo_logger.php';
 
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
+// Recupera l'email utente dalla sessione
 $emailSession = $_SESSION['user_email'] ?? null;
 $esito = '';
 
+// Se il form del commento è stato inviato ed esiste la sessione utente
 if (isset($_POST['submit_commento']) && $emailSession) {
     try {
         $progetto = $_POST['progetto'];
@@ -19,10 +21,12 @@ if (isset($_POST['submit_commento']) && $emailSession) {
 
         $conn = new mysqli($host, $username, $password, $dbname);
 
+        // Chiamata alla stored procedure per inserire il commento
         $stmt = $conn->prepare("CALL AggiungiCommento(?, ?, ?, ?)");
         $stmt->bind_param("ssss", $emailSession, $progetto, $data, $testo);
         logEvento("L'utente $emailSession ha aggiunto un commento al progetto $progetto");
 
+        // Se l’inserimento ha successo, reindirizza alla pagina stessa per ricaricarla pulita
         if ($stmt->execute()) {
             header("Location: visualizza_Progetti.php");
             exit();
@@ -59,6 +63,7 @@ if (isset($_POST['submit_commento']) && $emailSession) {
         }
     </style>
     <script>
+        // Funzione JS per mostrare/nascondere la sezione dei commenti
         function toggleCommentSection(progetto) {
             let commentSection = document.getElementById("comment-section-" + progetto);
             commentSection.style.display = commentSection.style.display === "block" ? "none" : "block";
@@ -80,6 +85,7 @@ if (isset($_POST['submit_commento']) && $emailSession) {
             $sql = "CALL VisualizzaProgetti()";
             $result = $conn->query($sql);
 
+            // Verifica se ci sono progetti
             if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
                     $progettoNome = htmlspecialchars($row['nome']);
@@ -94,14 +100,17 @@ if (isset($_POST['submit_commento']) && $emailSession) {
                     echo "<p>Stato: " . $row['stato'] . "</p>";
                     echo "<p>Tipo: " . $row['tipo'] . "</p>";
                     echo "<p>Email Creatore: " . $row['email_Creatore'] . "</p>";
+                    // Pulsanti di azione
                     echo "<div class='project-actions'>";
                     echo "<button onclick=\"toggleCommentSection('$progettoNome')\">Lascia un commento</button>";
+                    // Pulsante per candidatura solo se il progetto è di tipo software
                     if ($row['tipo'] == "software") {
                         echo "<button onclick=\"location.href='../candidatura/visualizza_Profili.php?nome_progetto=" . urlencode($progettoNome) . "'\">Invia candidatura</button>";
                     }
+                    // Pulsante per finanziare il progetto
                     echo "<button onclick=\"location.href='../finanziamento/finanzia_progetto.php?nome_progetto=" . urlencode($row['nome']) . "'\">Finanzia Progetto</button>";
                     echo "</div>";
-
+                    // Sezione commento (inizialmente nascosta)
                     echo "<div id='comment-section-$progettoNome' class='comment-section'>";
                     echo "<form method='post'>";
                     echo "<textarea name='commento' placeholder='Scrivi il tuo commento qui...' required></textarea>";
