@@ -2,22 +2,24 @@
 require '../config.php';
 require_once '../includes/mongo_logger.php';
 
+// Visualizzazione di tutti gli errori
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 $error = "";
-
+// Se il modulo è stato inviato tramite metodo POST recupera i dati inseriti nel form
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $nickname = $_POST['nickname'];
-    $user_password = $_POST['password'];  // rinominata per evitare conflitto con config
-    $nome = $_POST['nome'];
-    $cognome = $_POST['cognome'];
+    $email = trim($_POST['email']);
+    $nickname = trim($_POST['nickname']);
+    $user_password = trim($_POST['password']);  // Rinominata per evitare conflitto con config
+    $nome = trim($_POST['nome']);
+    $cognome = trim($_POST['cognome']);
     $anno_nascita = $_POST['anno_nascita'];
-    $luogo_nascita = $_POST['luogo_nascita'];
-    $codice_sicurezza = $_POST['codice_sicurezza'];
+    $luogo_nascita = trim($_POST['luogo_nascita']);
+    $codice_sicurezza = trim($_POST['codice_sicurezza']);
 
     try {
+        // Attiva eccezioni su errori MySQLi
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
         $conn = new mysqli($host, $username, $password, $dbname);
 
@@ -35,8 +37,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
         $conn->close();
 
+        // Registra l'evento su MongoDB
         logEvento("Nuovo amministratore registrato: $email");
-
+        
+        // In caso di successo mostra un messaggio e reindirizza al login altrimenti cattura l'errore e mostra un avviso
         echo "<script>
             alert('Registrazione amministratore completata con successo! Ora verrai reindirizzato al login.');
             window.location.href = '../login/loginAmministratore.php';
@@ -75,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit">Registrati</button>
             
         </form>
-        <p style="text-align:center; margin-top:10px;">
+        <p>
             Sei registrato? <a href="../login/loginAmministratore.php">Vai al login</a>
         </p>
     </div>

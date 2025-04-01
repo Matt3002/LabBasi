@@ -2,19 +2,21 @@
 require '../config.php';
 require_once '../includes/mongo_logger.php';
 
+// Visualizzazione di tutti gli errori
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 $error = "";
 
+// Se il modulo è stato inviato tramite metodo POST recupera i dati inseriti nel form
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $nickname = $_POST['nickname'];
-    $password1 = $_POST['password'];
-    $nome = $_POST['nome'];
-    $cognome = $_POST['cognome'];
+    $email = trim($_POST['email']);
+    $nickname = trim($_POST['nickname']);
+    $password1 = trim($_POST['password']);
+    $nome = trim($_POST['nome']);
+    $cognome = trim($_POST['cognome']);
     $anno_nascita = $_POST['anno_nascita'];
-    $luogo_nascita = $_POST['luogo_nascita'];
+    $luogo_nascita = trim($_POST['luogo_nascita']);
 
     try {
         // Attiva eccezioni su errori MySQLi
@@ -27,8 +29,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
         $conn->close();
 
+        // Registra l'evento su MongoDB
         logEvento("Nuovo utente registrato: $email");
 
+        // In caso di successo mostra un messaggio e reindirizza al login altrimenti cattura l'errore e mostra un avviso
         echo "<script>
                 alert('Registrazione completata con successo! Ora verrai reindirizzato al login.');
                 window.location.href = '../login/login.php';
@@ -64,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit">Registrati</button>
             
         </form>
-        <p style="text-align:center; margin-top:10px;">
+        <p>
             Sei registrato? <a href="../login/login.php">Vai al login</a>
         </p>
     </div>

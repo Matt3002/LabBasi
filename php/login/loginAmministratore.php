@@ -4,10 +4,11 @@ require '../config.php';
 
 $error = "";
 
+// Se il modulo è stato inviato tramite metodo POST recupera i dati inseriti nel form
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $password1 = trim($_POST['password']);
-    $securityCode = trim($_POST['securityCode']);
+    $securityCode = trim($_POST['securityCode']);  // Solo per amministratori viene richiesto il codice di sicurezza
 
     if (empty($email) || empty($password1) || empty($securityCode)) {
         $error = "Tutti i campi sono obbligatori";
@@ -22,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->close();
             $conn->next_result();
 
+            // Se l'autenticazione è riuscita avvia la sessione utente amministratore            
             $_SESSION['user_email'] = $email;
             $_SESSION['user_role'] = "Amministratore";
             header("Location: ../dashboard/dashboard.php");
@@ -40,15 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="../../css/styleLogin.css">
+    <link rel="stylesheet" href="../../css/style.css">
     <title>Login Amministratore</title>
-    <style>
-        .error-msg {
-            color: red;
-            text-align: center;
-            margin-top: 10px;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -59,11 +54,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="password" name="password" placeholder="Password" required>
             <input type="password" name="securityCode" placeholder="Codice di sicurezza" required>
             <button type="submit">Accedi</button>
+
+            <!-- Se è stato catturato un errore mostra il messaggio inerente -->
             <?php if ($error): ?>
                 <div class="error-msg"><?=htmlspecialchars($error)?></div>
             <?php endif; ?>
         </form>
-        <p style="text-align:center; margin-top:10px;">
+        <p>
         Non sei ancora registrato? <a href="../register/registerAmministratore.php">Vai alla pagina di registrazione</a>
         </p>
     </div>
