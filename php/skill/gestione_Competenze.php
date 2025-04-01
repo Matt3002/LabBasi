@@ -15,7 +15,7 @@ $error = null;
 
 // Connessione al database
 $mysqli = new mysqli($host, $username, $password, $dbname);
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT); // Per abilitare eccezioni mysqli
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 // Aggiunta di una nuova competenza
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nuova_competenza'])) {
@@ -62,7 +62,7 @@ $mysqli->close();
             background-color: #f5f7fa;
             color: #333;
             margin: 0;
-            padding: 0 20px 50px auto; /* spazio per sidebar */
+            padding: 0 20px 50px auto;
         }
 
         .container {

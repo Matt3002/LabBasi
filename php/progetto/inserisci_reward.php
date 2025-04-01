@@ -13,7 +13,7 @@ if (!$email_creatore) {
     die("<div class='msg error'>Accesso negato. Devi effettuare il login.</div>");
 }
 
-// Recupera i progetti del creatore per la tendina
+// Recupera i progetti del creatore
 $progetti = [];
 try {
     $stmt = $conn->prepare("SELECT nome FROM Progetto WHERE email_Creatore = ?");
