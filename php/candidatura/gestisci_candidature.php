@@ -2,6 +2,7 @@
 session_start();
 require '../config.php';
 
+//Recupera email del Creatore e il nome del Progetto
 $emailCreatore = $_SESSION['user_email'] ?? null;
 $nomeProgetto = $_GET['progetto'] ?? null;
 
@@ -77,11 +78,14 @@ $stmt->close();
 <?php
 // Gestione post
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Recupera i dati inviati dal form
     $emailUtente = $_POST['email_Utente'] ?? '';
     $idProfilo = $_POST['id_Profilo'] ?? '';
     $stato = $_POST['azione'] ?? '';
 
+    // Verifica che lo stato sia valido (accettata o rifiutata)
     if (in_array($stato, ['accettata', 'rifiutata'])) {
+        // Prepara la chiamata alla stored procedure per aggiornare la candidatura
         $stmt = $conn->prepare("CALL GestisciCandidatura(?, ?, ?, ?, ?)");
         $stmt->bind_param("sisss", $emailUtente, $idProfilo, $nomeProgetto, $emailCreatore, $stato);
         
